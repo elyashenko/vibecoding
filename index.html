@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вайб-Кодинг: Полный арсенал инженера — Senior+ Guide</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23f72585'/><stop offset='100%25' stop-color='%234361ee'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='%230a0a0f'/><text x='50' y='38' text-anchor='middle' font-size='28' font-family='monospace' fill='url(%23g)'>⚡</text><text x='50' y='72' text-anchor='middle' font-size='22' font-weight='bold' font-family='sans-serif' fill='url(%23g)'>VC</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;700;900&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #1a1a2e;
+  --bg-accent: #16213e;
+  --text-primary: #e8e8f0;
+  --text-secondary: #a0a0b8;
+  --text-muted: #6a6a80;
+  --accent-1: #f72585;
+  --accent-2: #7209b7;
+  --accent-3: #3a0ca3;
+  --accent-4: #4361ee;
+  --accent-5: #4cc9f0;
+  --accent-green: #06d6a0;
+  --accent-yellow: #ffd166;
+  --accent-orange: #ef476f;
+  --gradient-1: linear-gradient(135deg, #f72585, #7209b7);
+  --gradient-2: linear-gradient(135deg, #4361ee, #4cc9f0);
+  --gradient-3: linear-gradient(135deg, #06d6a0, #4cc9f0);
+  --gradient-4: linear-gradient(135deg, #ffd166, #ef476f);
+  --font-display: 'Unbounded', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+.slide-container {
+  width: 100%; height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 80px;
+  opacity: 0;
+  transform: translateX(100px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  background: var(--bg-primary);
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.slide.prev {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+
+.slide-number {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-muted);
+  z-index: 100;
+  letter-spacing: 2px;
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--gradient-1);
+  transition: width 0.4s ease;
+  z-index: 100;
+}
+
+.nav-hint {
+  position: fixed;
+  bottom: 30px;
+  left: 40px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  z-index: 100;
+  opacity: 0.5;
+}
+
+/* Slide layouts */
+.slide-title {
+  text-align: center;
+}
+
+.slide-title h1 {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6vw, 96px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.slide-title .subtitle {
+  font-size: clamp(18px, 2vw, 28px);
+  color: var(--text-secondary);
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.slide-title .meta {
+  margin-top: 40px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 900;
+  margin-bottom: 32px;
+  line-height: 1.2;
+}
+
+h2 .accent { 
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 .accent-b { 
+  background: var(--gradient-2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 .accent-g { 
+  background: var(--gradient-3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--accent-5);
+}
+
+.content {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.card h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.card p, .card li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.card ul li {
+  padding: 4px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.card ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent-5);
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.tag-pink { background: rgba(247,37,133,0.2); color: var(--accent-1); }
+.tag-blue { background: rgba(67,97,238,0.2); color: var(--accent-4); }
+.tag-green { background: rgba(6,214,160,0.2); color: var(--accent-green); }
+.tag-yellow { background: rgba(255,209,102,0.2); color: var(--accent-yellow); }
+.tag-purple { background: rgba(114,9,183,0.2); color: var(--accent-2); }
+
+.highlight-box {
+  background: var(--bg-accent);
+  border-left: 4px solid var(--accent-4);
+  padding: 20px 24px;
+  border-radius: 0 12px 12px 0;
+  margin: 16px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.highlight-box.warn {
+  border-left-color: var(--accent-yellow);
+}
+
+.highlight-box.danger {
+  border-left-color: var(--accent-orange);
+}
+
+.highlight-box.success {
+  border-left-color: var(--accent-green);
+}
+
+code {
+  font-family: var(--font-mono);
+  background: rgba(67,97,238,0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--accent-5);
+}
+
+pre {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text-secondary);
+}
+
+pre .kw { color: var(--accent-1); }
+pre .fn { color: var(--accent-4); }
+pre .str { color: var(--accent-green); }
+pre .cm { color: var(--text-muted); }
+
+.timeline {
+  position: relative;
+  padding-left: 40px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent-1), var(--accent-4), var(--accent-green));
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 28px;
+  padding-left: 24px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -32px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-4);
+  border: 3px solid var(--bg-primary);
+}
+
+.timeline-item:first-child::before { background: var(--accent-1); }
+.timeline-item:last-child::before { background: var(--accent-green); }
+
+.timeline-item .year {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent-5);
+  margin-bottom: 4px;
+}
+
+.timeline-item .title {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.timeline-item .desc {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.diagram-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.flow-box {
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  text-align: center;
+  min-width: 140px;
+}
+
+.flow-arrow {
+  font-size: 24px;
+  color: var(--text-muted);
+}
+
+.layer-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.layer {
+  padding: 24px 32px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.layer:first-child {
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(135deg, rgba(247,37,133,0.2), rgba(114,9,183,0.2));
+  border-bottom: none;
+}
+
+.layer:nth-child(2) {
+  background: linear-gradient(135deg, rgba(67,97,238,0.2), rgba(76,201,240,0.2));
+  border-bottom: none;
+}
+
+.layer:last-child {
+  border-radius: 0 0 16px 16px;
+  background: linear-gradient(135deg, rgba(6,214,160,0.15), rgba(76,201,240,0.15));
+}
+
+.layer .layer-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+.comparison-table th {
+  background: var(--bg-accent);
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent-5);
+}
+
+.comparison-table th:first-child {
+  border-radius: 12px 0 0 0;
+}
+
+.comparison-table th:last-child {
+  border-radius: 0 12px 0 0;
+}
+
+.comparison-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.comparison-table tr:last-child td:first-child {
+  border-radius: 0 0 0 12px;
+}
+
+.comparison-table tr:last-child td:last-child {
+  border-radius: 0 0 12px 0;
+}
+
+.comparison-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+.comparison-table .check { color: var(--accent-green); }
+.comparison-table .cross { color: var(--accent-orange); }
+
+.big-number {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 900;
+  background: var(--gradient-2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.icon-row {
+  display: flex;
+  gap: 32px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+
+.icon-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+}
+
+.icon-item .icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.slide-content-left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.list-styled {
+  list-style: none;
+  padding: 0;
+}
+
+.list-styled li {
+  padding: 8px 0;
+  padding-left: 28px;
+  position: relative;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.list-styled li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-4);
+  font-size: 18px;
+}
+
+.quote {
+  font-style: italic;
+  font-size: 24px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  border-left: 4px solid var(--accent-2);
+  padding-left: 24px;
+  margin: 24px 0;
+  max-width: 800px;
+}
+
+.quote .author {
+  font-style: normal;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  font-family: var(--font-mono);
+}
+
+.four-col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.mini-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+
+.mini-card .mini-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.mini-card .mini-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.mini-card .mini-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .slide { padding: 40px 32px; }
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .four-col { grid-template-columns: 1fr 1fr; }
+  h2 { font-size: 32px; }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.glow {
+  box-shadow: 0 0 40px rgba(67,97,238,0.15);
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-number" id="slideNumber"></div>
+<div class="nav-hint">← → or Space</div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- SLIDE 1: Title -->
+<div class="slide slide-title active" data-slide="0">
+  <h1>Вайб-Кодинг</h1>
+  <div class="subtitle">Полный арсенал инженера</div>
+  <div class="meta">
+    Skills &middot; Rules &middot; Roles &middot; Subagents &middot; PRD &middot; Checkpoints<br>
+    <span style="margin-top:8px;display:inline-block;color:var(--accent-5)">Senior+ Level &middot; 2026</span>
+  </div>
+</div>
+
+<!-- SLIDE 2: Agenda -->
+<div class="slide slide-content-left" data-slide="1">
+  <div class="content">
+    <h2><span class="accent">Карта</span> доклада</h2>
+    <div class="two-col">
+      <div>
+        <h3 style="color:var(--accent-1)">Часть I: Фундамент</h3>
+        <ul class="list-styled">
+          <li>Что такое вайб-кодинг и как он эволюционировал</li>
+          <li>Vibe Coding → Agentic Coding → Agentic Engineering</li>
+          <li>Таксономия терминов</li>
+        </ul>
+        <h3 style="color:var(--accent-4);margin-top:24px">Часть II: Ключевые примитивы</h3>
+        <ul class="list-styled">
+          <li><code>PRD</code> — документ требований как контракт</li>
+          <li><code>Rules</code> — конституция проекта</li>
+          <li><code>Skills</code> — подключаемые компетенции</li>
+          <li><code>Roles</code> — эволюция роли инженера</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color:var(--accent-green)">Часть III: Оркестрация</h3>
+        <ul class="list-styled">
+          <li><code>Subagents</code> — делегирование и специализация</li>
+          <li><code>Checkpoints</code> — точки восстановления</li>
+          <li><code>HITL</code> — человек в контуре</li>
+          <li><code>Middleware</code> — перехват и контроль</li>
+        </ul>
+        <h3 style="color:var(--accent-yellow);margin-top:24px">Часть IV: Архитектура</h3>
+        <ul class="list-styled">
+          <li>Стек: LangChain → LangGraph → Deep Agents</li>
+          <li>Паттерн PEV: Plan → Execute → Verify</li>
+          <li>Антипаттерны и ловушки</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: What is Vibe Coding -->
+<div class="slide slide-content-left" data-slide="2">
+  <div class="content">
+    <h2>Что такое <span class="accent">вайб-кодинг</span>?</h2>
+    <div class="quote">
+      «There's a new kind of coding I call "vibe coding", where you fully give in to the vibes, embrace exponentials, and forget that the code even exists.»
+      <div class="author">— Andrej Karpathy, 2 февраля 2025, X (Twitter)</div>
+    </div>
+    <div class="two-col" style="margin-top:32px">
+      <div class="card">
+        <span class="tag tag-pink">Определение</span>
+        <p>Парадигма разработки, при которой инженер описывает намерение на естественном языке, а ИИ генерирует, тестирует и итерирует код. Человек переходит от написания кода к управлению процессом его создания.</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-blue">Ключевой сдвиг</span>
+        <p>Код перестаёт быть основным артефактом работы. Основными артефактами становятся <strong>спецификации</strong> (PRD), <strong>правила</strong> (Rules), <strong>навыки</strong> (Skills) и <strong>архитектурные решения</strong>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: Evolution Timeline -->
+<div class="slide slide-content-left" data-slide="3">
+  <div class="content">
+    <h2><span class="accent-b">Эволюция</span> парадигмы</h2>
+    <div class="two-col">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="year">2023–2024</div>
+          <div class="title">Copilot-эра</div>
+          <div class="desc">Автодополнение кода. Человек пишет, ИИ подсказывает. Ответственность полностью на инженере.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="year">2025</div>
+          <div class="title">Vibe Coding</div>
+          <div class="desc">Описал → получил → запустил. Подходит для прототипов и демо. Контроль качества — опционален.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="year">2025–2026</div>
+          <div class="title">Agentic Coding</div>
+          <div class="desc">ИИ-агенты автономно анализируют, планируют, пишут, тестируют и итерируют. Структурированный процесс с обратной связью.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="year">2026+</div>
+          <div class="title">Agentic Engineering</div>
+          <div class="desc">Production-grade: PRD-driven, rule-bounded, с HITL и checkpoint-ами. Инженер = архитектор + оркестратор + ревьюер.</div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-yellow">Три столпа Agentic Engineering</span>
+          <ul>
+            <li><strong>Autonomy</strong> — агенты принимают решения о реализации самостоятельно</li>
+            <li><strong>Context</strong> — агенты анализируют код, зависимости, системные требования</li>
+            <li><strong>Control</strong> — guardrails гарантируют безопасность и compliance</li>
+          </ul>
+        </div>
+        <div class="highlight-box warn">
+          <strong>Критический разрыв:</strong> Вайб-кодинг без структуры = технический долг. Agentic Engineering = вайб-кодинг + дисциплина.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: Taxonomy -->
+<div class="slide slide-content-left" data-slide="4">
+  <div class="content">
+    <h2><span class="accent-g">Таксономия</span> терминов</h2>
+    <div class="four-col">
+      <div class="mini-card">
+        <div class="mini-icon">📋</div>
+        <div class="mini-title">PRD</div>
+        <div class="mini-desc">Контракт на результат. Определяет «что» и «когда готово»</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">📜</div>
+        <div class="mini-title">Rules</div>
+        <div class="mini-desc">Конституция проекта. Неизменяемые ограничения и стандарты</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🧠</div>
+        <div class="mini-title">Skills</div>
+        <div class="mini-desc">Подключаемые знания. On-demand экспертиза агента</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🎭</div>
+        <div class="mini-title">Roles</div>
+        <div class="mini-desc">Роли инженера и агента в процессе разработки</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🤖</div>
+        <div class="mini-title">Subagents</div>
+        <div class="mini-desc">Специализированные агенты для делегирования задач</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">💾</div>
+        <div class="mini-title">Checkpoints</div>
+        <div class="mini-desc">Точки восстановления. Откат и time-travel</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🛡️</div>
+        <div class="mini-title">HITL</div>
+        <div class="mini-desc">Human-in-the-Loop. Утверждение критичных операций</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">⚙️</div>
+        <div class="mini-title">Middleware</div>
+        <div class="mini-desc">Перехватчики. Контроль потока выполнения агента</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">📝</div>
+        <div class="mini-title">TodoList</div>
+        <div class="mini-desc">Планирование задач. Декомпозиция сложных операций</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🧊</div>
+        <div class="mini-title">Context Window</div>
+        <div class="mini-desc">Контекстное окно. Ограниченный ресурс внимания</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🔀</div>
+        <div class="mini-title">Modes</div>
+        <div class="mini-desc">Режимы: Agent, Plan, Ask, Debug. Переключение стратегий</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🗄️</div>
+        <div class="mini-title">Memory</div>
+        <div class="mini-desc">Краткосрочная и долгосрочная память агента</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🔍</div>
+        <div class="mini-title">Reflection</div>
+        <div class="mini-desc">Самопроверка агента. Обязательный финальный проход</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🎯</div>
+        <div class="mini-title">Model Selection</div>
+        <div class="mini-desc">Выбор модели под задачу. Fast vs capable trade-off</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🔄</div>
+        <div class="mini-title">Best-of-N</div>
+        <div class="mini-desc">Параллельные попытки в изолированных worktrees</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-icon">🌊</div>
+        <div class="mini-title">Streaming</div>
+        <div class="mini-desc">Потоковая передача: tokens, state updates, custom events</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: PRD -->
+<div class="slide slide-content-left" data-slide="5">
+  <div class="content">
+    <h2><span class="accent">PRD</span> — контракт на результат</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);margin-bottom:24px">
+          <strong>Product Requirements Document</strong> — центральный артефакт agentic engineering. Определяет не как реализовать, а что должно быть достигнуто и когда задача считается завершённой.
+        </p>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-green">PRD-Driven Agent Loop</span>
+          <p>Итеративный паттерн выполнения PRD агентом (также известный в сообществе как «Ralph Wiggum Loop»):</p>
+          <ul>
+            <li>Написать PRD с чеклистом критериев «done»</li>
+            <li>Агент декомпозирует через <code>TodoList</code></li>
+            <li>Выполнение пунктов + checkpoint на каждом шаге</li>
+            <li>Верификация: тесты, lint, code review</li>
+            <li>Цикл до полного завершения чеклиста</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <pre><span class="cm"># PRD: Feature — User Authentication</span>
+
+<span class="kw">## Objective</span>
+JWT-based authentication with OAuth2 support.
+
+<span class="kw">## Acceptance Criteria</span>
+- [ ] Login endpoint returns JWT token
+- [ ] Token refresh mechanism (15 min TTL)
+- [ ] OAuth2 flow for Google, GitHub
+- [ ] Rate limiting: 5 attempts / minute
+- [ ] Session invalidation on password change
+
+<span class="kw">## Constraints</span>
+- No session cookies (SPA-only)
+- bcrypt for password hashing (cost=12)
+- All endpoints return RFC 7807 errors
+
+<span class="kw">## Out of Scope</span>
+- MFA (separate PRD)
+- SSO enterprise (Phase 2)</pre>
+        <div class="highlight-box success" style="margin-top:12px">
+          <strong>PRD ≠ ТЗ.</strong> PRD для агента — это исполняемая спецификация с чётко определёнными критериями завершённости.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: Rules -->
+<div class="slide slide-content-left" data-slide="6">
+  <div class="content">
+    <h2><span class="accent-b">Rules</span> — конституция проекта</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);margin-bottom:24px">
+          Rules — это <strong>неизменяемые ограничения</strong>, которые действуют на каждом шаге работы агента. Они формируют «конституцию» проекта и определяют, что агенту позволено и запрещено.
+        </p>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-purple">Типы правил в Cursor</span>
+          <ul>
+            <li><strong>Project Rules</strong> — <code>.cursor/rules/</code>, version-controlled, привязаны к кодовой базе</li>
+            <li><strong>User Rules</strong> — глобальные для IDE, персональные настройки</li>
+            <li><strong>Team Rules</strong> — командные правила (Team/Enterprise)</li>
+            <li><strong>AGENTS.md</strong> — альтернативный формат, всегда загружается при старте</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag tag-blue">Скоупинг правил</span>
+          <ul>
+            <li><code>alwaysApply: true</code> — действует всегда</li>
+            <li><code>globs: **/*.ts</code> — при работе с файлами</li>
+            <li>По запросу — через @-упоминание</li>
+            <li>Интеллектуально — агент решает сам</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <pre><span class="cm"># .cursor/rules/api-standards.mdc</span>
+---
+<span class="kw">description</span>: <span class="str">API coding standards for backend</span>
+<span class="kw">globs</span>: <span class="str">src/api/**/*.ts</span>
+<span class="kw">alwaysApply</span>: <span class="str">false</span>
+---
+
+<span class="kw"># Error Handling</span>
+All API errors MUST use RFC 7807 format.
+Never expose stack traces in production.
+
+<span class="kw"># Validation</span>
+Use Zod schemas for ALL input validation.
+Validate at the controller boundary, not in
+service layer.
+
+<span class="kw"># Naming</span>
+- Endpoints: kebab-case (/user-profiles)
+- Handlers: camelCase (getUserProfile)
+- DB columns: snake_case (created_at)</pre>
+        <div class="highlight-box warn" style="margin-top:12px">
+          <strong>Rules vs Skills:</strong> Rules — всегда активны (конституция). Skills — подключаются по запросу (экспертиза). Не путайте.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: Rules Deep Dive -->
+<div class="slide slide-content-left" data-slide="7">
+  <div class="content">
+    <h2><span class="accent-b">Rules</span> — глубже</h2>
+    <div class="two-col">
+      <div>
+        <h3 style="color:var(--accent-4)">4 типа правил</h3>
+        <table class="comparison-table">
+          <tr>
+            <th>Тип</th>
+            <th>Когда активируется</th>
+            <th>Расход контекста</th>
+          </tr>
+          <tr>
+            <td><strong>Always Apply</strong></td>
+            <td>Каждый промпт, каждый файл</td>
+            <td style="color:var(--accent-orange)">Высокий — постоянный</td>
+          </tr>
+          <tr>
+            <td><strong>Auto Attached</strong></td>
+            <td>При открытии файлов по glob-паттерну</td>
+            <td style="color:var(--accent-yellow)">Средний — по файлу</td>
+          </tr>
+          <tr>
+            <td><strong>Agent Requested</strong></td>
+            <td>Агент решает сам по description</td>
+            <td style="color:var(--accent-green)">Низкий — on-demand</td>
+          </tr>
+          <tr>
+            <td><strong>Manual</strong></td>
+            <td>Только при @-упоминании</td>
+            <td style="color:var(--accent-green)">Минимальный</td>
+          </tr>
+        </table>
+        <div class="highlight-box warn" style="margin-top:16px">
+          <strong>Лимит:</strong> Жёсткого ограничения на количество .mdc-файлов нет, но каждое always-apply правило на ~100 строк съедает ~500–1000 токенов. 5 таких правил = 2500–5000 токенов <strong>до начала диалога</strong>. Контекстное окно — 200K токенов; rules конкурируют с кодом и историей чата.
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--accent-green)">Бюджет правил для проекта</h3>
+        <div class="card" style="margin-bottom:12px">
+          <span class="tag tag-green">Рекомендация</span>
+          <ul>
+            <li><strong>Always Apply:</strong> 1–3 правила, суммарно &lt; 150 строк</li>
+            <li><strong>Auto Attached:</strong> 5–15 правил по glob-паттернам</li>
+            <li><strong>Agent Requested:</strong> без ограничений (загружает description)</li>
+            <li><strong>Manual:</strong> без ограничений</li>
+          </ul>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <span class="tag tag-pink">Типичная структура</span>
+          <pre style="font-size:11px;margin-top:4px">.cursor/rules/
+├── project-core.mdc      <span class="cm"># alwaysApply: true</span>
+├── typescript.mdc         <span class="cm"># globs: **/*.ts</span>
+├── react-components.mdc   <span class="cm"># globs: src/components/**</span>
+├── api-standards.mdc      <span class="cm"># globs: src/api/**</span>
+├── testing.mdc            <span class="cm"># globs: **/*.test.*</span>
+├── database.mdc           <span class="cm"># globs: src/db/**</span>
+└── deployment.mdc         <span class="cm"># agent requested</span></pre>
+        </div>
+        <div class="card">
+          <span class="tag tag-yellow">Приоритет загрузки</span>
+          <p style="font-size:13px">Team Rules → Project Rules → User Rules → Legacy (.cursorrules). При конфликте побеждает более высокий приоритет.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: Skills -->
+<div class="slide slide-content-left" data-slide="8">
+  <div class="content">
+    <h2><span class="accent-g">Skills</span> — подключаемые компетенции</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);margin-bottom:20px">
+          Skills — это <strong>on-demand загружаемые инструкции</strong> для агента. В отличие от Rules (всегда в контексте), Skills загружаются только когда нужны, экономя контекстное окно.
+        </p>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-green">Структура SKILL.md</span>
+          <pre style="font-size:12px;margin-top:8px">skills/
+└── python-testing/
+    ├── SKILL.md        <span class="cm"># Обязательно: инструкции</span>
+    ├── reference.md    <span class="cm"># Опционально: детали</span>
+    └── examples.md     <span class="cm"># Опционально: примеры</span></pre>
+        </div>
+        <div class="card">
+          <span class="tag tag-yellow">Принцип Progressive Disclosure</span>
+          <p>SKILL.md < 500 строк — только суть. Детали — в отдельных файлах с ссылками на 1 уровень вглубь. Каждый токен конкурирует за контекст.</p>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-pink">Skills vs Rules vs Memory</span>
+          <table class="comparison-table" style="margin-top:8px">
+            <tr>
+              <th>Параметр</th>
+              <th>Skills</th>
+              <th>Rules</th>
+              <th>AGENTS.md</th>
+            </tr>
+            <tr>
+              <td>Загрузка</td>
+              <td>On-demand</td>
+              <td>По glob/always</td>
+              <td>Всегда</td>
+            </tr>
+            <tr>
+              <td>Назначение</td>
+              <td>Экспертиза</td>
+              <td>Ограничения</td>
+              <td>Предпочтения</td>
+            </tr>
+            <tr>
+              <td>Размер</td>
+              <td>До 500 строк</td>
+              <td>До 50 строк</td>
+              <td>Компактно</td>
+            </tr>
+            <tr>
+              <td>Хранение</td>
+              <td><code>skills/</code></td>
+              <td><code>.cursor/rules/</code></td>
+              <td>Корень проекта</td>
+            </tr>
+          </table>
+        </div>
+        <div class="card">
+          <span class="tag tag-blue">Хранение и экосистема</span>
+          <p style="font-size:13px"><strong>Personal:</strong> <code>~/.cursor/skills/</code> — доступны во всех проектах</p>
+          <p style="font-size:13px;margin-top:4px"><strong>Project:</strong> <code>.cursor/skills/</code> — shared с командой через git</p>
+          <p style="font-size:13px;margin-top:8px">Установка: <code>npx skills add owner/repo@skill -g</code></p>
+          <p style="font-size:13px;margin-top:4px">Каталог: <a href="https://skills.sh" style="color:var(--accent-5)">skills.sh</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: Skills Ecosystem - 9 Agents -->
+<div class="slide slide-content-left" data-slide="9">
+  <div class="content">
+    <h2><span class="accent-g">Skills</span> — экосистема 9 агентов</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:15px;color:var(--text-secondary);margin-bottom:16px">
+          SKILL.md появился в Claude Code (октябрь 2025). За 2 месяца его приняли все основные IDE-агенты. Стандарт общий — реализации различаются.
+        </p>
+        <table class="comparison-table" style="font-size:12px">
+          <tr>
+            <th>Агент</th>
+            <th>Директория</th>
+            <th>Активация</th>
+            <th>Каталог</th>
+          </tr>
+          <tr>
+            <td><strong>Claude Code</strong></td>
+            <td><code>.claude/skills/</code></td>
+            <td>Description match</td>
+            <td>anthropics/skills</td>
+          </tr>
+          <tr>
+            <td><strong>Cursor</strong></td>
+            <td><code>.cursor/skills/</code></td>
+            <td>Glob + description</td>
+            <td>LobeHub, skills.sh</td>
+          </tr>
+          <tr>
+            <td><strong>Codex CLI</strong></td>
+            <td><code>.agents/skills/</code></td>
+            <td>$skill-name</td>
+            <td>openai/skills</td>
+          </tr>
+          <tr>
+            <td><strong>Copilot</strong></td>
+            <td><code>.github/skills/</code></td>
+            <td>/skill-name</td>
+            <td>awesome-copilot</td>
+          </tr>
+          <tr>
+            <td><strong>Kiro (AWS)</strong></td>
+            <td><code>.kiro/skills/</code></td>
+            <td>GUI панель</td>
+            <td>Нет</td>
+          </tr>
+          <tr>
+            <td><strong>Goose</strong></td>
+            <td><code>.goose/skills/</code></td>
+            <td>Natural lang</td>
+            <td>Block internal</td>
+          </tr>
+        </table>
+        <div class="highlight-box" style="margin-top:12px">
+          <strong>Портативная директория:</strong> <code>.agents/skills/</code> — читается большинством агентов. Для максимальной совместимости кладите skills туда.
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--accent-1)">Anthropic vs LangChain vs Cursor</h3>
+        <table class="comparison-table" style="font-size:12px">
+          <tr>
+            <th>Аспект</th>
+            <th>Anthropic</th>
+            <th>LangChain</th>
+            <th>Cursor</th>
+          </tr>
+          <tr>
+            <td>Происхождение</td>
+            <td>Автор стандарта</td>
+            <td>Интеграция стандарта в deepagents-CLI</td>
+            <td>Адаптация с v2.3.35</td>
+          </tr>
+          <tr>
+            <td>Загрузка</td>
+            <td>3-уровневый progressive disclosure</td>
+            <td>Filesystem-based с backend-ами</td>
+            <td>Glob + description match</td>
+          </tr>
+          <tr>
+            <td>Уникальное</td>
+            <td>Партнёрские skills (Figma, Stripe, Atlassian)</td>
+            <td>Skills интегрированы в middleware</td>
+            <td>Hooks (security pipeline)</td>
+          </tr>
+          <tr>
+            <td>Инсталлятор</td>
+            <td>Нет (community tools)</td>
+            <td>deepagents-CLI</td>
+            <td>npx skills add</td>
+          </tr>
+          <tr>
+            <td>Субагенты</td>
+            <td>Claude Code subagents</td>
+            <td>SubAgentMiddleware</td>
+            <td>Subagents v2.4</td>
+          </tr>
+          <tr>
+            <td>50+ skills</td>
+            <td><span class="check">✓</span> без context bloat</td>
+            <td><span class="check">✓</span> on-demand loading</td>
+            <td><span class="check">✓</span> on-demand loading</td>
+          </tr>
+        </table>
+        <div class="highlight-box warn" style="margin-top:12px">
+          <strong>Ключевое различие:</strong> Anthropic = origin author + партнёры. LangChain = framework-level интеграция с middleware и memory. Cursor = IDE-native с hooks и subagents. Формат SKILL.md — один, реализации — разные.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: Roles -->
+<div class="slide slide-content-left" data-slide="10">
+  <div class="content">
+    <h2><span class="accent">Roles</span> — эволюция роли инженера</h2>
+    <div class="two-col">
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-pink">Было: Developer</span>
+          <ul>
+            <li>Пишет код руками</li>
+            <li>Отлаживает построчно</li>
+            <li>Ручной code review</li>
+            <li>Знание = API + синтаксис</li>
+          </ul>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-blue">Стало: Vibe Coder</span>
+          <ul>
+            <li>Формулирует промпт</li>
+            <li>Принимает/отклоняет результат</li>
+            <li>Патчит edge cases</li>
+            <li>Знание = формулировка intent-а</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag tag-green">Должно быть: Agentic Engineer</span>
+          <ul>
+            <li>Пишет PRD и Rules</li>
+            <li>Проектирует архитектуру</li>
+            <li>Оркестрирует субагентов</li>
+            <li>Ревьюит и верифицирует</li>
+            <li>Управляет checkpoints</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--accent-yellow)">Роли агента в IDE</h3>
+        <div class="card" style="margin-bottom:12px">
+          <span class="tag tag-purple">Modes</span>
+          <ul>
+            <li><strong>Agent Mode</strong> — полный доступ ко всем инструментам, реализация</li>
+            <li><strong>Plan Mode</strong> — read-only, проектирование подхода, обсуждение trade-offs</li>
+            <li><strong>Ask Mode</strong> — read-only, исследование кода, ответы на вопросы</li>
+            <li><strong>Debug Mode</strong> — систематическая отладка с runtime-доказательствами</li>
+          </ul>
+        </div>
+        <div class="highlight-box">
+          <strong>Senior-инсайт:</strong> Переключение между режимами — не UI-фича, а архитектурный приём. Plan Mode перед Agent Mode существенно снижает число итераций на сложных задачах за счёт раннего выявления trade-offs.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 12: Roles for Frontend Developer -->
+<div class="slide slide-content-left" data-slide="11">
+  <div class="content">
+    <h2><span class="accent-b">Roles</span> для Frontend Developer</h2>
+    <div class="two-col">
+      <div>
+        <div class="card" style="margin-bottom:16px;border-color:rgba(6,214,160,0.3)">
+          <span class="tag tag-green">Помогают</span>
+          <h3 style="font-size:16px;color:var(--accent-green)">Rules и Skills, которые нужны</h3>
+          <ul>
+            <li><strong>React/Next.js patterns</strong> — Server Components vs Client, App Router conventions</li>
+            <li><strong>TypeScript strict</strong> — <code>noImplicitAny</code>, proper generics, type inference</li>
+            <li><strong>Component structure</strong> — PascalCase, co-located styles, barrel exports</li>
+            <li><strong>State management</strong> — Zustand/Jotai patterns, no prop drilling > 2 levels</li>
+            <li><strong>Testing skill</strong> — @testing-library/react, MSW для mocking API</li>
+            <li><strong>Accessibility</strong> — ARIA roles, semantic HTML, focus management</li>
+            <li><strong>CSS conventions</strong> — Tailwind utility order, design tokens</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag tag-blue">Пример rule для React</span>
+          <pre style="font-size:11px;margin-top:4px"><span class="cm"># .cursor/rules/react.mdc</span>
+---
+<span class="kw">description</span>: <span class="str">React component patterns</span>
+<span class="kw">globs</span>: <span class="str">src/components/**/*.tsx</span>
+<span class="kw">alwaysApply</span>: <span class="str">false</span>
+---
+- Use functional components only
+- Extract hooks > 10 lines into custom hooks
+- Props interface named {Component}Props
+- No default exports for components
+- Error boundaries on route level</pre>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px;border-color:rgba(239,71,111,0.3)">
+          <span class="tag tag-pink">Мешают</span>
+          <h3 style="font-size:16px;color:var(--accent-orange)">Rules и Skills, которые вредят</h3>
+          <ul>
+            <li><strong>Backend-specific rules в alwaysApply</strong> — SQL conventions, ORM patterns загружаются на каждый промпт, тратят контекст впустую</li>
+            <li><strong>Избыточные style guides</strong> — копирование всего Airbnb ESLint guide в правило; агент и так знает стандарты</li>
+            <li><strong>Rules про CI/CD</strong> — deployment, Docker, Terraform — irrelevant при работе с .tsx файлами</li>
+            <li><strong>Overscoped always-apply</strong> — «Всегда используй PostgreSQL» при работе с UI-компонентами</li>
+            <li><strong>Conflicting state rules</strong> — «Используй Redux» + «Используй MobX» в разных правилах</li>
+            <li><strong>Устаревшие patterns</strong> — Class components, HOC вместо hooks, getInitialProps</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag tag-yellow">Оптимальный набор Rules для Frontend</span>
+          <pre style="font-size:11px;margin-top:4px">.cursor/rules/
+├── project-core.mdc      <span class="cm"># always: stack, monorepo</span>
+├── react-patterns.mdc     <span class="cm"># glob: **/*.tsx</span>
+├── typescript-strict.mdc  <span class="cm"># glob: **/*.{ts,tsx}</span>
+├── styling.mdc            <span class="cm"># glob: **/*.{css,tsx}</span>
+├── testing.mdc            <span class="cm"># glob: **/*.test.*</span>
+└── a11y.mdc               <span class="cm"># agent-requested</span>
+<span class="cm"># Итого: 1 always + 4 glob + 1 agent = 6 rules</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 13: Subagents -->
+<div class="slide slide-content-left" data-slide="12">
+  <div class="content">
+    <h2><span class="accent-b">Subagents</span> — делегирование и специализация</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);margin-bottom:20px">
+          Subagents — <strong>специализированные агенты</strong>, работающие в изолированном контексте. Основной агент делегирует задачи через <code>task</code> tool, получая обратно только финальный отчёт.
+        </p>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-blue">Встроенные в Cursor</span>
+          <ul>
+            <li><strong>Explore</strong> — поиск по кодовой базе, глобы, grep</li>
+            <li><strong>Shell</strong> — выполнение bash-команд</li>
+            <li><strong>Browser</strong> — навигация и тестирование в браузере</li>
+            <li><strong>General Purpose</strong> — универсальный, наследует инструменты</li>
+          </ul>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-yellow">Наследование</span>
+          <ul>
+            <li><strong>General Purpose</strong> — наследует tools и config родителя</li>
+            <li><strong>Custom subagents</strong> — <strong>НЕ</strong> наследуют skills. Указывать явно</li>
+          </ul>
+        </div>
+        <div class="highlight-box danger">
+          <strong>Subagents stateless!</strong> Каждый вызов — чистый контекст. Полные инструкции в одном промпте. Нельзя полагаться на историю предыдущих вызовов.
+        </div>
+      </div>
+      <div>
+        <pre><span class="cm"># Кастомный субагент в Deep Agents</span>
+agent = <span class="fn">create_deep_agent</span>(
+    subagents=[
+        {
+            <span class="str">"name"</span>: <span class="str">"researcher"</span>,
+            <span class="str">"description"</span>: <span class="str">"Research and compile findings"</span>,
+            <span class="str">"system_prompt"</span>: <span class="str">"Search thoroughly, 
+                              return concise summary"</span>,
+            <span class="str">"tools"</span>: [search_papers, web_search],
+            <span class="str">"skills"</span>: [<span class="str">"/research-skills/"</span>],
+        },
+        {
+            <span class="str">"name"</span>: <span class="str">"code-deployer"</span>,
+            <span class="str">"description"</span>: <span class="str">"Deploy code to prod"</span>,
+            <span class="str">"tools"</span>: [run_tests, deploy],
+            <span class="str">"interrupt_on"</span>: {
+                <span class="str">"deploy"</span>: <span class="kw">True</span>  <span class="cm"># HITL!</span>
+            },
+        }
+    ],
+    checkpointer=<span class="fn">MemorySaver</span>()
+)</pre>
+        <div class="highlight-box" style="margin-top:8px">
+          <strong>Skills не наследуются</strong> субагентами автоматически — указывайте явно через <code>skills</code> параметр.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 14: Checkpoints -->
+<div class="slide slide-content-left" data-slide="13">
+  <div class="content">
+    <h2><span class="accent-g">Checkpoints</span> — точки восстановления</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);margin-bottom:20px">
+          Checkpoints — <strong>механизм сохранения состояния</strong>, позволяющий откатить, форкнуть или путешествовать по истории выполнения. Работают на двух уровнях.
+        </p>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-green">Уровень 1: Git Checkpoints</span>
+          <ul>
+            <li>Коммит <strong>перед</strong> каждой значимой операцией ИИ</li>
+            <li>WIP-коммиты как точки отката</li>
+            <li><code>git restore</code> для безопасного возврата</li>
+            <li>Auto-commit на feature-ветках (опционально)</li>
+            <li>Squash перед merge в main</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag tag-blue">Уровень 2: Agent Checkpoints</span>
+          <ul>
+            <li><strong>Checkpointer</strong> сохраняет состояние на каждом super-step</li>
+            <li><strong>thread_id</strong> — идентификатор последовательности</li>
+            <li>Time Travel — просмотр и откат к любому шагу</li>
+            <li>Fork — ветвление от прошлого состояния</li>
+            <li><code>InMemorySaver</code> → dev, <code>PostgresSaver</code> → prod</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--accent-yellow)">Workflow с точками восстановления</h3>
+        <div class="diagram-flow" style="flex-direction:column;align-items:stretch">
+          <div class="flow-box" style="background:rgba(247,37,133,0.15);border:1px solid rgba(247,37,133,0.3)">
+            1. <code>git commit -m "WIP: before auth"</code>
+          </div>
+          <div class="flow-arrow" style="text-align:center">↓</div>
+          <div class="flow-box" style="background:rgba(67,97,238,0.15);border:1px solid rgba(67,97,238,0.3)">
+            2. Агент реализует фичу (автоматический checkpointing состояния)
+          </div>
+          <div class="flow-arrow" style="text-align:center">↓</div>
+          <div class="flow-box" style="background:rgba(6,214,160,0.15);border:1px solid rgba(6,214,160,0.3)">
+            3. Верификация: тесты, ревью, lint
+          </div>
+          <div class="flow-arrow" style="text-align:center">↓ Проблема?</div>
+          <div class="flow-box" style="background:rgba(255,209,102,0.15);border:1px solid rgba(255,209,102,0.3)">
+            4a. <code>git restore</code> → откат к WIP-коммиту<br>
+            4b. <code>graph.get_state_history()</code> → time travel к шагу агента
+          </div>
+        </div>
+        <div class="highlight-box success" style="margin-top:16px">
+          <strong>Правило:</strong> Нет коммита перед ИИ-операцией = нет точки отката. Checkpoint дешевле переделки.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 15: HITL -->
+<div class="slide slide-content-left" data-slide="14">
+  <div class="content">
+    <h2><span class="accent">HITL</span> — человек в контуре</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);margin-bottom:20px">
+          <strong>Human-in-the-Loop</strong> — паттерн, при котором агент <strong>приостанавливает</strong> выполнение перед критичной операцией и запрашивает решение человека.
+        </p>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-pink">Три решения</span>
+          <ul>
+            <li><strong>Approve</strong> — подтвердить и продолжить</li>
+            <li><strong>Edit</strong> — модифицировать аргументы, затем выполнить</li>
+            <li><strong>Reject</strong> — отклонить с обратной связью</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag tag-yellow">Когда использовать</span>
+          <ul>
+            <li>Запись в БД, удаление данных</li>
+            <li>Деплой в production</li>
+            <li>Отправка email/уведомлений</li>
+            <li>Compliance-чувствительные операции</li>
+            <li>Модификация инфраструктуры</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <pre><span class="cm"># Конфигурация HITL</span>
+agent = <span class="fn">create_deep_agent</span>(
+    interrupt_on={
+        <span class="str">"write_file"</span>: <span class="kw">True</span>,
+        <span class="str">"execute_sql"</span>: {
+            <span class="str">"allowed_decisions"</span>: 
+                [<span class="str">"approve"</span>, <span class="str">"reject"</span>]
+        },
+        <span class="str">"read_file"</span>: <span class="kw">False</span>,  <span class="cm"># Без HITL</span>
+    },
+    checkpointer=<span class="fn">MemorySaver</span>()  <span class="cm"># Обязателен!</span>
+)
+
+<span class="cm"># Resume после одобрения</span>
+result = agent.<span class="fn">invoke</span>(
+    <span class="fn">Command</span>(resume={
+        <span class="str">"decisions"</span>: [{<span class="str">"type"</span>: <span class="str">"approve"</span>}]
+    }),
+    config=config
+)</pre>
+        <div class="highlight-box danger" style="margin-top:12px">
+          <strong>Требования:</strong> HITL без <code>checkpointer</code> = ошибка. HITL без <code>thread_id</code> = невозможно возобновить. Оба — обязательны.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 16: Middleware & TodoList -->
+<div class="slide slide-content-left" data-slide="15">
+  <div class="content">
+    <h2><span class="accent-b">Middleware</span> и <span class="accent-g">TodoList</span></h2>
+    <div class="two-col">
+      <div>
+        <h3 style="color:var(--accent-4)">Middleware — перехват и контроль</h3>
+        <p style="font-size:15px;color:var(--text-secondary);margin-bottom:16px">
+          Middleware перехватывает цикл работы агента на заданных точках. Deep Agents используют явный middleware layer (в отличие от LangGraph, где это ручная проводка).
+        </p>
+        <table class="comparison-table">
+          <tr>
+            <th>Middleware</th>
+            <th>Назначение</th>
+            <th>Вкл.</th>
+          </tr>
+          <tr>
+            <td><code>TodoList</code></td>
+            <td>Планирование задач</td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td><code>Filesystem</code></td>
+            <td>Файловые операции</td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td><code>SubAgent</code></td>
+            <td>Делегирование</td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td><code>Skills</code></td>
+            <td>On-demand знания</td>
+            <td>Opt-in</td>
+          </tr>
+          <tr>
+            <td><code>Memory</code></td>
+            <td>Долгосрочная память</td>
+            <td>Opt-in</td>
+          </tr>
+          <tr>
+            <td><code>HITL</code></td>
+            <td>Утверждение</td>
+            <td>Opt-in</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <h3 style="color:var(--accent-green)">TodoList — декомпозиция задач</h3>
+        <p style="font-size:15px;color:var(--text-secondary);margin-bottom:16px">
+          Агент автоматически декомпозирует сложные задачи в управляемый список через <code>write_todos</code>. Статусы: <code>pending → in_progress → completed</code>.
+        </p>
+        <pre><span class="cm"># Агент автоматически планирует:</span>
+write_todos([
+  {<span class="str">"content"</span>: <span class="str">"Design data models"</span>,
+   <span class="str">"status"</span>: <span class="str">"in_progress"</span>},
+  {<span class="str">"content"</span>: <span class="str">"Implement CRUD endpoints"</span>,
+   <span class="str">"status"</span>: <span class="str">"pending"</span>},
+  {<span class="str">"content"</span>: <span class="str">"Add authentication"</span>,
+   <span class="str">"status"</span>: <span class="str">"pending"</span>},
+  {<span class="str">"content"</span>: <span class="str">"Write tests"</span>,
+   <span class="str">"status"</span>: <span class="str">"pending"</span>},
+])</pre>
+        <div class="highlight-box" style="margin-top:16px">
+          <strong>Custom middleware хуки:</strong> <code>before_model</code>, <code>after_model</code>, <code>wrap_tool_call</code>, <code>before_agent</code>, <code>after_agent</code> — полный контроль пайплайна.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 17: Memory -->
+<div class="slide slide-content-left" data-slide="16">
+  <div class="content">
+    <h2><span class="accent-g">Memory</span> — модель памяти агента</h2>
+    <div class="three-col">
+      <div class="card">
+        <span class="tag tag-pink">Краткосрочная</span>
+        <h3 style="font-size:16px">StateBackend</h3>
+        <ul>
+          <li>Живёт в рамках thread</li>
+          <li>Теряется при завершении</li>
+          <li>По умолчанию</li>
+          <li>Рабочие файлы, черновики</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag tag-blue">Долгосрочная</span>
+        <h3 style="font-size:16px">StoreBackend</h3>
+        <ul>
+          <li>Персистентна между threads</li>
+          <li>Требует Store instance</li>
+          <li>Предпочтения, факты</li>
+          <li><code>InMemoryStore</code> → dev</li>
+          <li><code>PostgresStore</code> → prod</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag tag-green">Гибридная</span>
+        <h3 style="font-size:16px">CompositeBackend</h3>
+        <ul>
+          <li>Маршрутизация по путям</li>
+          <li><code>/draft/</code> → ephemeral</li>
+          <li><code>/memories/</code> → persistent</li>
+          <li>Longest prefix match</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:24px">
+      <strong>Ключевое различие:</strong> AGENTS.md (всегда в контексте) ≠ Skills (on-demand) ≠ Store (cross-session). Неправильный выбор модели памяти — причина деградации качества на длинных сессиях.
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 18: Ecosystem Registries -->
+<div class="slide slide-content-left" data-slide="17">
+  <div class="content">
+    <h2>Единые <span class="accent">реестры</span> — кто где?</h2>
+    <div class="two-col">
+      <div>
+        <table class="comparison-table">
+          <tr>
+            <th>Примитив</th>
+            <th>Реестр / Каталог</th>
+            <th>Зрелость</th>
+          </tr>
+          <tr>
+            <td><strong>Skills</strong></td>
+            <td>
+              <a href="https://skills.sh" style="color:var(--accent-5)">skills.sh</a> — CLI + каталог<br>
+              <a href="https://agentskills.io" style="color:var(--accent-5)">agentskills.io</a> — открытый стандарт<br>
+              anthropics/skills — партнёрские<br>
+              openai/skills — curated + experimental
+            </td>
+            <td><span style="color:var(--accent-green)">Зрелый</span><br><span style="font-size:11px;color:var(--text-muted)">Единый SKILL.md стандарт, 9 агентов</span></td>
+          </tr>
+          <tr>
+            <td><strong>Rules</strong></td>
+            <td>
+              <a href="https://cursor.directory" style="color:var(--accent-5)">cursor.directory</a> — 500+ правил<br>
+              <a href="https://prpm.dev" style="color:var(--accent-5)">PRPM.dev</a> — 7500+ пакетов<br>
+              awesome-cursorrules — 38K+ stars<br>
+              cursor-handbook — 110 rules + agents
+            </td>
+            <td><span style="color:var(--accent-yellow)">Фрагментирован</span><br><span style="font-size:11px;color:var(--text-muted)">Нет единого стандарта обмена</span></td>
+          </tr>
+          <tr>
+            <td><strong>Subagents</strong></td>
+            <td>
+              VoltAgent/awesome-codex-subagents — 136+ агентов (.toml)<br>
+              AgoraHub — 14+ верифицированных агентов<br>
+              Block/Goose — 100+ внутренний marketplace
+            </td>
+            <td><span style="color:var(--accent-orange)">Ранний</span><br><span style="font-size:11px;color:var(--text-muted)">Нет единого формата</span></td>
+          </tr>
+          <tr>
+            <td><strong>Roles</strong></td>
+            <td>
+              GitAgent — SOUL.md + DUTIES.md (новый)<br>
+              <span style="color:var(--text-muted)">Единого реестра нет</span>
+            </td>
+            <td><span style="color:var(--accent-orange)">Зарождается</span><br><span style="font-size:11px;color:var(--text-muted)">GitAgent пытается стандартизировать</span></td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:12px">
+          <span class="tag tag-green">Skills — эталон зрелости</span>
+          <p style="font-size:14px">Единственный примитив с открытым стандартом (agentskills.io), CLI-инсталлятором (<code>npx skills</code>), и кросс-агентной совместимостью. Все остальные пока — community-driven коллекции без portable формата.</p>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <span class="tag tag-yellow">Rules — богатый, но фрагментированный</span>
+          <p style="font-size:14px">3+ крупных каталога, но нет единого формата обмена. .mdc (Cursor) ≠ .windsurfrules ≠ CLAUDE.md. PRPM.dev пытается стать универсальным npm для AI-правил с поддержкой Cursor, Claude, Windsurf и Copilot.</p>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <span class="tag tag-pink">GitAgent — попытка объединить всё</span>
+          <p style="font-size:14px">Docker-подобная спецификация: <code>agent.yaml</code> (манифест), <code>SOUL.md</code> (личность), <code>DUTIES.md</code> (обязанности), <code>skills/</code>, <code>rules/</code>, <code>memory/</code>. Определи агента один раз — экспортируй в любой фреймворк.</p>
+        </div>
+        <div class="highlight-box">
+          <strong>Прогноз:</strong> Skills уже стандартизованы. Rules — следующие на очереди (PRPM ведёт). Subagents и Roles — пока Wild West; ждём конвергенции форматов.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 19: Framework Stack -->
+<div class="slide slide-content-left" data-slide="18">
+  <div class="content">
+    <h2><span class="accent">Стек</span> фреймворков</h2>
+    <div class="two-col">
+      <div>
+        <div class="layer-stack">
+          <div class="layer">
+            Deep Agents
+            <div class="layer-label">Batteries included: planning, memory, skills, files</div>
+          </div>
+          <div class="layer">
+            LangGraph
+            <div class="layer-label">Orchestration: graphs, loops, state, persistence</div>
+          </div>
+          <div class="layer">
+            LangChain
+            <div class="layer-label">Foundation: models, tools, prompts, RAG</div>
+          </div>
+        </div>
+        <div class="highlight-box" style="margin-top:24px">
+          <strong>Слои, не конкуренты.</strong> Выбор верхнего уровня не отсекает нижние. LangGraph графы работают внутри Deep Agents, LangChain примитивы — везде. Deep Agents — одна из реализаций «batteries-included» уровня; аналоги: CrewAI, AutoGen, и IDE-встроенные агенты (Cursor, Windsurf).
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--accent-yellow)">Decision Guide</h3>
+        <table class="comparison-table">
+          <tr>
+            <th>Вопрос</th>
+            <th>Да →</th>
+          </tr>
+          <tr>
+            <td>Нужны подзадачи, файлы, память, skills?</td>
+            <td><strong style="color:var(--accent-1)">Deep Agents</strong></td>
+          </tr>
+          <tr>
+            <td>Сложный control flow, loops, branching, HITL?</td>
+            <td><strong style="color:var(--accent-4)">LangGraph</strong></td>
+          </tr>
+          <tr>
+            <td>Один агент: input → tools → output?</td>
+            <td><strong style="color:var(--accent-green)">LangChain</strong></td>
+          </tr>
+          <tr>
+            <td>Чистый model call / RAG pipeline?</td>
+            <td><strong style="color:var(--accent-5)">LangChain LCEL</strong></td>
+          </tr>
+        </table>
+        <div class="card" style="margin-top:16px">
+          <span class="tag tag-purple">Mixing Layers</span>
+          <p style="font-size:14px">Типичная архитектура: Deep Agents оркестратор → LangGraph субагент для специфичного control flow → LangChain tools и retrievers как building blocks на каждом уровне.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 20: PEV Pattern -->
+<div class="slide slide-content-left" data-slide="19">
+  <div class="content">
+    <h2>Паттерн <span class="accent-b">PEV</span></h2>
+    <div class="diagram-flow" style="margin-bottom:40px">
+      <div class="flow-box" style="background:rgba(247,37,133,0.2);border:1px solid rgba(247,37,133,0.4);font-size:18px">
+        Plan
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(67,97,238,0.2);border:1px solid rgba(67,97,238,0.4);font-size:18px">
+        Execute
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(6,214,160,0.2);border:1px solid rgba(6,214,160,0.4);font-size:18px">
+        Verify
+      </div>
+      <div class="flow-arrow">↻</div>
+    </div>
+    <div class="three-col">
+      <div class="card">
+        <span class="tag tag-pink">Plan</span>
+        <ul>
+          <li>Написать PRD с acceptance criteria</li>
+          <li>Определить архитектурные constraints через Rules</li>
+          <li>Декомпозировать на agent-sized задачи (TodoList)</li>
+          <li>Назначить роли субагентам</li>
+          <li>Определить quality gates</li>
+          <li>Установить checkpoint-стратегию</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag tag-blue">Execute</span>
+        <ul>
+          <li>Агенты работают автономно в рамках constraints</li>
+          <li>Skills загружаются on-demand по необходимости</li>
+          <li>Субагенты получают изолированный контекст</li>
+          <li>HITL на критичных операциях</li>
+          <li>Автоматическое checkpointing состояния</li>
+          <li>WIP-коммиты в git</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag tag-green">Verify</span>
+        <ul>
+          <li>Тесты (unit, integration, e2e)</li>
+          <li>Lint и type-check</li>
+          <li>Code review (человек или агент)</li>
+          <li>Проверка PRD чеклиста</li>
+          <li>При фейле → откат к checkpoint</li>
+          <li>При успехе → squash & merge</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 21: Anti-patterns -->
+<div class="slide slide-content-left" data-slide="20">
+  <div class="content">
+    <h2><span class="accent">Антипаттерны</span> и ловушки</h2>
+    <div class="two-col">
+      <div>
+        <div class="card" style="margin-bottom:16px;border-color:rgba(239,71,111,0.3)">
+          <span class="tag tag-pink">P0 — Runtime failures</span>
+          <ul>
+            <li><strong>HITL без checkpointer</strong> — crash; agent не может сохранить точку паузы</li>
+            <li><strong>Забытый thread_id</strong> — каждый вызов = чистый стейт, контекст теряется</li>
+            <li><strong>InMemorySaver в production</strong> — потеря всех данных при рестарте процесса</li>
+            <li><strong>Side effects до interrupt()</strong> — дубликаты записей при каждом resume</li>
+          </ul>
+        </div>
+        <div class="card" style="border-color:rgba(255,209,102,0.3)">
+          <span class="tag tag-yellow">P1 — Silent degradation</span>
+          <ul>
+            <li><strong>List без reducer</strong> — последняя запись тихо затирает предыдущие</li>
+            <li><strong>Command + static edge</strong> — оба маршрута выполняются неочевидно</li>
+            <li><strong>Vibe coding без Rules</strong> — неконтролируемый tech debt, заметен позже</li>
+            <li><strong>PRD без acceptance criteria</strong> — невозможно определить «done»</li>
+            <li><strong>AGENTS.md как Knowledge Base</strong> — context bloat, деградация качества</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px;border-color:rgba(239,71,111,0.3)">
+          <span class="tag tag-pink">Архитектурные ошибки</span>
+          <ul>
+            <li><strong>Субагенты как stateful</strong> — они ephemeral by design</li>
+            <li><strong>Skills наследуются субагентами</strong> — нет, указывайте явно</li>
+            <li><strong>Один агент на всё</strong> — context bloat, потеря фокуса</li>
+            <li><strong>Нет checkpoint перед ИИ-операцией</strong> — нет возможности отката</li>
+          </ul>
+        </div>
+        <div class="card" style="border-color:rgba(6,214,160,0.3)">
+          <span class="tag tag-green">Правильные паттерны</span>
+          <ul>
+            <li>Upsert (не insert) перед <code>interrupt()</code></li>
+            <li>Side effects после <code>interrupt()</code></li>
+            <li>Отдельные nodes для side effects</li>
+            <li>Explicit skills для каждого субагента</li>
+            <li>Rules < 50 строк, Skills < 500 строк</li>
+            <li>WIP-коммит → ИИ-операция → верификация</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 22: Reflection, Model Selection, Best-of-N -->
+<div class="slide slide-content-left" data-slide="21">
+  <div class="content">
+    <h2>Дополнительные <span class="accent">примитивы</span></h2>
+    <div class="three-col">
+      <div class="card">
+        <span class="tag tag-pink">Reflection</span>
+        <h3 style="font-size:16px">Самопроверка агента</h3>
+        <p style="font-size:14px;margin-bottom:12px">Обязательный финальный проход, при котором агент критически оценивает собственный результат перед возвратом.</p>
+        <ul>
+          <li>Проверка соответствия PRD</li>
+          <li>Поиск edge cases</li>
+          <li>Валидация constraints (Rules)</li>
+          <li>Оценка полноты решения</li>
+        </ul>
+        <div class="highlight-box" style="margin-top:12px;padding:12px">
+          Reflection — не опция, а <strong>обязательный</strong> этап в production-grade agentic workflow.
+        </div>
+      </div>
+      <div class="card">
+        <span class="tag tag-blue">Model Selection</span>
+        <h3 style="font-size:16px">Выбор модели под задачу</h3>
+        <p style="font-size:14px;margin-bottom:12px">Не все задачи требуют самой мощной модели. Trade-off: стоимость, латентность, качество.</p>
+        <ul>
+          <li><strong>Fast</strong> — поиск, grep, простые правки. Низкая цена, высокая скорость</li>
+          <li><strong>Default</strong> — стандартные задачи разработки</li>
+          <li><strong>Capable</strong> — архитектурные решения, сложный рефакторинг, multi-step reasoning</li>
+        </ul>
+        <div class="highlight-box" style="margin-top:12px;padding:12px">
+          Субагенты могут использовать <strong>разные</strong> модели. Explore-агент = fast, Code-review = capable.
+        </div>
+      </div>
+      <div class="card">
+        <span class="tag tag-green">Best-of-N</span>
+        <h3 style="font-size:16px">Параллельные попытки</h3>
+        <p style="font-size:14px;margin-bottom:12px">Запуск N параллельных агентов в изолированных git worktrees. Каждый получает свою ветку и рабочую директорию.</p>
+        <ul>
+          <li>Изолированный эксперимент</li>
+          <li>Сравнение N подходов</li>
+          <li>Выбор лучшего результата</li>
+          <li>Безопасное A/B тестирование решений</li>
+        </ul>
+        <div class="highlight-box" style="margin-top:12px;padding:12px">
+          Каждый runner = своя ветка + worktree. Основной код <strong>не затрагивается</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 23: Context Window -->
+<div class="slide slide-content-left" data-slide="22">
+  <div class="content">
+    <h2><span class="accent-b">Context Window</span> — ограниченный ресурс</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);margin-bottom:20px">
+          Контекстное окно — это <strong>конечный объём информации</strong>, которую агент может «помнить» в рамках одной сессии. Каждый загруженный файл, правило и skill конкурирует за это пространство.
+        </p>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-blue">Стратегии управления контекстом</span>
+          <ul>
+            <li><strong>Progressive Disclosure</strong> — загружай только то, что нужно сейчас</li>
+            <li><strong>Subagent isolation</strong> — изолированный контекст на подзадачу</li>
+            <li><strong>Skills on-demand</strong> — не greedily, а by necessity</li>
+            <li><strong>Compact Rules</strong> — < 50 строк, одна забота на правило</li>
+            <li><strong>TodoList</strong> — вместо удержания всего плана в промпте</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-yellow">Бюджет контекста</span>
+          <table class="comparison-table">
+            <tr>
+              <th>Элемент</th>
+              <th>Загрузка</th>
+              <th>Стоимость</th>
+            </tr>
+            <tr>
+              <td>System Prompt</td>
+              <td>Всегда</td>
+              <td>Высокая</td>
+            </tr>
+            <tr>
+              <td>AGENTS.md</td>
+              <td>Всегда</td>
+              <td>Средняя</td>
+            </tr>
+            <tr>
+              <td>Project Rules (always)</td>
+              <td>Всегда</td>
+              <td>Низкая*</td>
+            </tr>
+            <tr>
+              <td>Project Rules (glob)</td>
+              <td>По файлу</td>
+              <td>Низкая</td>
+            </tr>
+            <tr>
+              <td>Skills</td>
+              <td>On-demand</td>
+              <td>Средняя</td>
+            </tr>
+            <tr>
+              <td>Файлы проекта</td>
+              <td>По запросу</td>
+              <td>Переменная</td>
+            </tr>
+            <tr>
+              <td>История чата</td>
+              <td>Накопительно</td>
+              <td>Растёт</td>
+            </tr>
+          </table>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px">* при соблюдении < 50 строк на правило</p>
+        </div>
+        <div class="highlight-box warn">
+          <strong>Практика:</strong> Если агент «забывает» ранние инструкции — контекст переполнен. Делегируйте в субагент или разбейте на отдельные сессии с checkpoint-ами.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 24: When to use what -->
+<div class="slide slide-content-left" data-slide="23">
+  <div class="content">
+    <h2><span class="accent-g">Матрица</span> применимости</h2>
+    <table class="comparison-table" style="margin-bottom:24px">
+      <tr>
+        <th>Сценарий</th>
+        <th>Подход</th>
+        <th>Обоснование</th>
+      </tr>
+      <tr>
+        <td>Прототип, демо, хакатон</td>
+        <td>Vibe Coding</td>
+        <td>Скорость важнее качества, одноразовый код</td>
+      </tr>
+      <tr>
+        <td>Новая фича в существующем проекте</td>
+        <td>Agentic Coding + PRD + Rules</td>
+        <td>Нужен контроль: стиль, архитектура, тесты</td>
+      </tr>
+      <tr>
+        <td>Большой рефакторинг</td>
+        <td>Deep Agents + SubAgents + Checkpoints</td>
+        <td>Много файлов, нужна декомпозиция, откат</td>
+      </tr>
+      <tr>
+        <td>CI/CD Pipeline с ИИ</td>
+        <td>LangGraph + HITL</td>
+        <td>Точный control flow, approval gates</td>
+      </tr>
+      <tr>
+        <td>RAG / Knowledge Base</td>
+        <td>LangChain + Retrievers</td>
+        <td>Стандартный pipeline, без сложной оркестрации</td>
+      </tr>
+      <tr>
+        <td>Safety-critical / Regulated</td>
+        <td><span style="color:var(--accent-orange)">НЕ вайб-кодинг</span></td>
+        <td>Медицина, авионика, финансы — ручной контроль обязателен</td>
+      </tr>
+    </table>
+    <div class="highlight-box warn">
+      <strong>Senior-правило:</strong> Вайб-кодинг — инструмент, не методология. Без Rules, PRD и Checkpoints он создаёт больше проблем, чем решает. С ними — кратно ускоряет разработку. Ваша задача как Senior+ — выбрать правильный уровень дисциплины для каждого контекста.
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 25: Key Takeaways -->
+<div class="slide slide-title" data-slide="24">
+  <div class="content" style="max-width:900px">
+    <h2 style="font-size:48px;margin-bottom:40px"><span class="accent">Ключевые</span> выводы</h2>
+    <div style="text-align:left">
+      <ul class="list-styled" style="font-size:19px">
+        <li><strong>PRD</strong> — не документация, а исполняемый контракт с чеклистом «done»</li>
+        <li><strong>Rules</strong> — конституция проекта, < 50 строк, одна забота на правило</li>
+        <li><strong>Skills</strong> — on-demand экспертиза, < 500 строк, progressive disclosure</li>
+        <li><strong>Roles</strong> — инженер = архитектор + оркестратор + ревьюер, не prompt-writer</li>
+        <li><strong>Subagents</strong> — stateless, изолированный контекст, явные skills</li>
+        <li><strong>Checkpoints</strong> — двойной уровень: git WIP + agent state; дешевле переделки</li>
+        <li><strong>HITL</strong> — обязателен для деструктивных операций; требует checkpointer + thread_id</li>
+        <li><strong>Context Window</strong> — конечный ресурс; каждый токен должен оправдывать своё присутствие</li>
+        <li><strong>Reflection</strong> — обязательный финальный проход; агент без самопроверки = неконтролируемый агент</li>
+        <li><strong>Model Selection</strong> — fast для explore, capable для архитектуры; не все задачи требуют GPT-4.1</li>
+        <li><strong>PEV</strong> — Plan → Execute → Verify как основной цикл agentic engineering</li>
+      </ul>
+    </div>
+    <div style="margin-top:40px;text-align:center">
+      <div class="quote" style="border-left-color:var(--accent-green);text-align:center;font-size:20px">
+        Вайб-кодинг + дисциплина = Agentic Engineering.
+        <br>Разница между прототипом и production — в Rules, Checkpoints и HITL.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 26: Q&A -->
+<div class="slide slide-title" data-slide="25">
+  <h1 style="font-size:72px">Q&A</h1>
+  <div class="subtitle">Вопросы и дискуссия</div>
+  <div style="max-width:700px;margin-top:32px;text-align:left">
+    <h3 style="color:var(--accent-5);text-align:center;margin-bottom:16px">Ресурсы для погружения</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:14px;color:var(--text-secondary)">
+      <div class="card" style="padding:16px">
+        <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px">Документация</div>
+        <div>docs.cursor.com/context/rules</div>
+        <div>cursor.com/docs/subagents</div>
+        <div>skills.sh</div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px">Практика</div>
+        <div>cursor.com/blog/agent-best-practices</div>
+        <div>vibe-kb.com/guide</div>
+        <div>31daysofvibecoding.com</div>
+      </div>
+    </div>
+  </div>
+  <div class="meta" style="margin-top:24px">
+    <span style="color:var(--text-muted)">16 терминов &middot; 26 слайдов &middot; Senior+ Level</span>
+  </div>
+</div>
+
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let currentSlide = 0;
+const totalSlides = slides.length;
+
+function updateSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.classList.remove('active', 'prev');
+    if (i === index) slide.classList.add('active');
+    else if (i < index) slide.classList.add('prev');
+  });
+  
+  document.getElementById('slideNumber').textContent = 
+    `${String(index + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+  
+  document.getElementById('progressBar').style.width = 
+    `${((index + 1) / totalSlides) * 100}%`;
+}
+
+function nextSlide() {
+  if (currentSlide < totalSlides - 1) {
+    currentSlide++;
+    updateSlide(currentSlide);
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    updateSlide(currentSlide);
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  switch(e.key) {
+    case 'ArrowRight':
+    case ' ':
+    case 'Enter':
+      e.preventDefault();
+      nextSlide();
+      break;
+    case 'ArrowLeft':
+    case 'Backspace':
+      e.preventDefault();
+      prevSlide();
+      break;
+  }
+});
+
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+document.addEventListener('touchend', (e) => {
+  const diff = touchStartX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 50) {
+    diff > 0 ? nextSlide() : prevSlide();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  const x = e.clientX;
+  const w = window.innerWidth;
+  if (x > w * 0.7) nextSlide();
+  else if (x < w * 0.3) prevSlide();
+});
+
+updateSlide(0);
+</script>
+</body>
+</html>
