@@ -5,3 +5,5 @@
 ## Live Demo
 
 - [Vercel deployment](https://vibecoding-puce-sigma.vercel.app/)
+
+Этот материал создан исключительно в ознакомительных целях
