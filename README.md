@@ -1,4 +1,4 @@
-# Vibe Coding Presentation (Senior+)
+# Vibe Coding Presentation
 
 Презентация по теме **Vibe Coding & Agentic Engineering**.
 
