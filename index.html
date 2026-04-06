@@ -1140,16 +1140,26 @@ prompt: <span class="str">"замени пункт 3 на:
           Skills — это <strong>on-demand загружаемые инструкции</strong> для агента. В отличие от Rules (всегда в контексте), Skills загружаются только когда нужны, экономя контекстное окно.
         </p>
         <div class="card" style="margin-bottom:16px">
-          <span class="tag tag-green">Структура SKILL.md</span>
+          <span class="tag tag-green">Пример: frontend-design</span>
           <pre style="font-size:12px;margin-top:8px">skills/
-└── python-testing/
-    ├── SKILL.md        <span class="cm"># Обязательно: инструкции</span>
-    ├── reference.md    <span class="cm"># Опционально: детали</span>
-    └── examples.md     <span class="cm"># Опционально: примеры</span></pre>
+└── frontend-design/
+    ├── SKILL.md         <span class="cm"># инструкции агенту</span>
+    ├── design-system.md <span class="cm"># токены и компоненты</span>
+    └── examples.md      <span class="cm"># референсы и примеры</span></pre>
+          <pre style="font-size:11px;margin-top:8px"><span class="cm"># SKILL.md (фрагмент)</span>
+<span class="kw">## Когда использовать</span>
+Когда задача — создать UI: компонент,
+страницу, лендинг или дашборд.
+
+<span class="kw">## Принципы</span>
+- Mobile-first, затем desktop
+- Семантичный HTML (nav, section, article)
+- Цветовые токены из design-system.md
+- Избегать generic AI-эстетики</pre>
         </div>
         <div class="card">
           <span class="tag tag-yellow">Принцип Progressive Disclosure</span>
-          <p>SKILL.md < 500 строк — только суть. Детали — в отдельных файлах с ссылками на 1 уровень вглубь. Каждый токен конкурирует за контекст.</p>
+          <p>SKILL.md &lt; 500 строк — только суть. Детали — в отдельных файлах с ссылками на 1 уровень вглубь. Каждый токен конкурирует за контекст.</p>
         </div>
       </div>
       <div>
@@ -1261,15 +1271,18 @@ prompt: <span class="str">"замени пункт 3 на:
           </ul>
         </div>
         <div class="card" style="margin-bottom:14px">
-          <span class="tag tag-green">Skills в Kilo Code</span>
-          <pre style="font-size:12px;margin-top:8px"><span class="cm"># Установка skill из каталога</span>
-npx skills add owner/repo@skill-name
+          <span class="tag tag-green">Примеры фронтенд-скиллов</span>
+          <ul style="font-size:13px;margin-top:8px">
+            <li><code>frontend-design</code> — UI с высоким дизайн-качеством, Tailwind, токены</li>
+            <li><code>react-testing</code> — @testing-library/react + MSW mocking</li>
+            <li><code>a11y-audit</code> — ARIA, семантика, axe-core</li>
+            <li><code>perf-web-vitals</code> — LCP, CLS, FCP оптимизация</li>
+          </ul>
+          <pre style="font-size:11px;margin-top:8px"><span class="cm"># Установить и использовать</span>
+npx skills add org/skills@frontend-design -g
 
-<span class="cm"># Личный каталог (все проекты)</span>
-~/.agents/skills/
-
-<span class="cm"># Командный каталог (через git)</span>
-.agents/skills/</pre>
+<span class="cm"># Активация (description match в Kilo Code)</span>
+<span class="str">"Создай карточку товара с Tailwind"</span></pre>
         </div>
         <div class="highlight-box warn">
           <strong>Формат один — инструменты разные.</strong> SKILL.md читают все агенты; активация, каталоги и механизм discovery у каждого свои. Пишите skills под наименьший общий знаменатель.
