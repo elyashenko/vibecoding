@@ -280,6 +280,14 @@ h3 {
   border-left-color: var(--accent-green);
 }
 
+.highlight-box .author {
+  font-style: normal;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  font-family: var(--font-mono);
+}
+
 code {
   font-family: var(--font-mono);
   background: rgba(67,97,238,0.15);
@@ -645,7 +653,8 @@ pre .cm { color: var(--text-muted); }
         <h3 style="color:var(--accent-4);margin-top:24px">Часть II: Ключевые примитивы</h3>
         <ul class="list-styled">
           <li><code>PRD</code> — документ требований как контракт</li>
-          <li><code>Rules</code> — конституция проекта</li>
+          <li><code>Refinement</code> — короткие циклы: одна переменная за раз, скриншоты как один из каналов</li>
+          <li><code>Rules</code> — конституция, регламент vs промпт, структура Kilo Code</li>
           <li><code>Skills</code> — подключаемые компетенции</li>
           <li><code>Roles</code> — эволюция роли инженера</li>
         </ul>
@@ -727,7 +736,9 @@ pre .cm { color: var(--text-muted); }
           </ul>
         </div>
         <div class="highlight-box warn">
-          <strong>Критический разрыв:</strong> Вайб-кодинг без структуры = технический долг. Agentic Engineering = вайб-кодинг + дисциплина.
+          Vibe coding без архитектуры, тестов и правил быстро превращается в технический долг.<br>
+          Agentic engineering — это AI-ускоренная разработка под человеческим контролем и с инженерной дисциплиной.
+          <div class="author">— Perplexity AI</div>
         </div>
       </div>
     </div>
@@ -873,99 +884,152 @@ JWT-based authentication with OAuth2 support.
   </div>
 </div>
 
-<!-- SLIDE 7: Rules -->
+<!-- SLIDE 7: Refinement loop -->
 <div class="slide slide-content-left" data-slide="6">
   <div class="content">
-    <h2><span class="accent-b">Rules</span> — конституция проекта</h2>
+    <h2><span class="accent-b">Refinement</span> — короткие циклы обратной связи с агентом</h2>
     <div class="two-col">
       <div>
         <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);margin-bottom:24px">
-          Rules — это <strong>неизменяемые ограничения</strong>, которые действуют на каждом шаге работы агента. Они формируют «конституцию» проекта и определяют, что агенту позволено и запрещено.
+          Начинайте с рабочего черновика, а не с идеала. Каждая итерация меняет ровно одну переменную — иначе нельзя понять, что именно сработало.
         </p>
         <div class="card" style="margin-bottom:16px">
-          <span class="tag tag-purple">Типы правил в Cursor</span>
+          <span class="tag tag-blue">Порядок уточнения</span>
           <ul>
-            <li><strong>Project Rules</strong> — <code>.cursor/rules/</code>, version-controlled, привязаны к кодовой базе</li>
-            <li><strong>User Rules</strong> — глобальные для IDE, персональные настройки</li>
-            <li><strong>Team Rules</strong> — командные правила (Team/Enterprise)</li>
-            <li><strong>AGENTS.md</strong> — альтернативный формат, всегда загружается при старте</li>
+            <li><strong>Layout</strong> — сетка, компоновка левой и правой колонки</li>
+            <li><strong>Иерархия</strong> — что главное, что второстепенное</li>
+            <li><strong>Плотность</strong> — отступы, межстрочный интервал, размер шрифта</li>
+            <li><strong>Содержание</strong> — формулировки, акценты, порядок пунктов</li>
           </ul>
         </div>
         <div class="card">
-          <span class="tag tag-blue">Скоупинг правил</span>
+          <span class="tag tag-purple">Скриншоты как один из каналов</span>
           <ul>
-            <li><code>alwaysApply: true</code> — действует всегда</li>
-            <li><code>globs: **/*.ts</code> — при работе с файлами</li>
-            <li>По запросу — через @-упоминание</li>
-            <li>Интеллектуально — агент решает сам</li>
+            <li>Скриншот — дополнение к тексту, не замена промпту</li>
+            <li>Прикрепляйте только если инструмент поддерживает image-based feedback</li>
+            <li>Показывайте конкретный элемент, а не весь экран целиком</li>
           </ul>
         </div>
       </div>
       <div>
-        <pre><span class="cm"># .cursor/rules/api-standards.mdc</span>
----
-<span class="kw">description</span>: <span class="str">API coding standards for backend</span>
-<span class="kw">globs</span>: <span class="str">src/api/**/*.ts</span>
-<span class="kw">alwaysApply</span>: <span class="str">false</span>
----
+        <pre><span class="cm"># Итерация 1 — layout</span>
+prompt: <span class="str">"заголовок влево, код — вправо
+        в pre-блоке, одна колонка"</span>
 
-<span class="kw"># Error Handling</span>
-All API errors MUST use RFC 7807 format.
-Never expose stack traces in production.
+<span class="cm"># Итерация 2 — плотность</span>
+prompt: <span class="str">"уменьши межстрочный у списков
+        до 1.4, убери нижний отступ"</span>
 
-<span class="kw"># Validation</span>
-Use Zod schemas for ALL input validation.
-Validate at the controller boundary, not in
-service layer.
+<span class="cm"># Итерация 3 — скриншот + текст</span>
+[screenshot] + prompt:
+  <span class="str">"правый блок на 40px уже,
+   выравнивание по верху"</span>
 
-<span class="kw"># Naming</span>
-- Endpoints: kebab-case (/user-profiles)
-- Handlers: camelCase (getUserProfile)
-- DB columns: snake_case (created_at)</pre>
+<span class="cm"># Итерация 4 — содержание</span>
+prompt: <span class="str">"замени пункт 3 на:
+        'Prefer explicit over implicit'"</span></pre>
         <div class="highlight-box warn" style="margin-top:12px">
-          <strong>Rules vs Skills:</strong> Rules — всегда активны (конституция). Skills — подключаются по запросу (экспертиза). Не путайте.
+          <strong>Антипаттерн:</strong> «Переделай слайд полностью в другом стиле» — нет способа понять, что именно не устраивало и что теперь стало лучше.
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SLIDE 8: Rules Deep Dive -->
+<!-- SLIDE 8: Rules — Kilo Code -->
 <div class="slide slide-content-left" data-slide="7">
+  <div class="content">
+    <h2><span class="accent-b">Rules</span> — конституция проекта (Kilo Code)</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:16px;line-height:1.7;color:var(--text-secondary);margin-bottom:16px">
+          Rules — <strong>устойчивые ограничения и стандарты</strong> для агента на весь репозиторий. Оформляются как обычный Markdown — один файл, одна зона ответственности. Версионируются вместе с кодом.
+        </p>
+        <div class="card" style="margin-bottom:12px">
+          <span class="tag tag-purple">Структура проекта</span>
+          <pre style="font-size:11px;margin-top:8px;line-height:1.5">project/
+├── .kilo/
+│   └── rules/
+│       ├── 00-product-principles.md
+│       ├── 10-frontend-architecture.md
+│       ├── 20-ui-system.md
+│       ├── 30-accessibility.md
+│       └── 40-performance.md
+├── kilo.jsonc
+└── src/</pre>
+        </div>
+        <div class="card">
+          <span class="tag tag-green">Подключение в kilo.jsonc</span>
+          <pre style="font-size:12px;margin-top:8px">{
+  <span class="kw">"instructions"</span>: [
+    <span class="str">".kilo/rules/*.md"</span>
+  ]
+}</pre>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px">Можно указывать маску или конкретные файлы — для разных задач разные подмножества.</p>
+        </div>
+      </div>
+      <div>
+        <pre><span class="cm"># .kilo/rules/25-api-standards.md</span>
+
+<span class="kw">## Ошибки API</span>
+Все ответы об ошибках MUST соответствовать RFC 7807.
+Не отдавать stack trace наружу.
+
+<span class="kw">## Валидация</span>
+Вход валидировать на границе контроллера (Zod),
+не протаскивать сырой ввод в сервисный слой.
+
+<span class="kw">## Именование</span>
+- Эндпоинты: kebab-case (/user-profiles)
+- Хендлеры: camelCase (getUserProfile)
+- Колонки БД: snake_case (created_at)</pre>
+        <div class="highlight-box warn" style="margin-top:12px">
+          <strong>Rules vs Skills:</strong> rules задают постоянную рамку проекта для всех задач; skills подключаются точечно под конкретную задачу. Не смешивайте роли.
+        </div>
+        <div class="highlight-box" style="margin-top:8px">
+          <strong>Итог:</strong> rules — не конфиг агента, а <em>часть кодовой базы</em>. Ревью, диффы, история изменений — всё как у обычного кода.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: Rules — глубже (контекст и модули) -->
+<div class="slide slide-content-left" data-slide="8">
   <div class="content">
     <h2><span class="accent-b">Rules</span> — глубже</h2>
     <div class="two-col">
       <div>
-        <h3 style="color:var(--accent-4)">4 типа правил</h3>
+        <h3 style="color:var(--accent-4)">Как правила съедают контекст</h3>
         <table class="comparison-table">
           <tr>
-            <th>Тип</th>
-            <th>Когда активируется</th>
+            <th>Паттерн</th>
+            <th>Когда подходит</th>
             <th>Расход контекста</th>
           </tr>
           <tr>
-            <td><strong>Always Apply</strong></td>
-            <td>Каждый промпт, каждый файл</td>
-            <td style="color:var(--accent-orange)">Высокий — постоянный</td>
+            <td><strong>Все <code>.md</code> из instructions</strong></td>
+            <td>Небольшой, заранее ограниченный набор</td>
+            <td style="color:var(--accent-orange)">Растёт с числом и объёмом файлов</td>
           </tr>
           <tr>
-            <td><strong>Auto Attached</strong></td>
-            <td>При открытии файлов по glob-паттерну</td>
-            <td style="color:var(--accent-yellow)">Средний — по файлу</td>
+            <td><strong>Узкий glob / подмножество файлов</strong></td>
+            <td>Разные политики для разных частей монорепо</td>
+            <td style="color:var(--accent-yellow)">Средний — зависит от маски</td>
           </tr>
           <tr>
-            <td><strong>Agent Requested</strong></td>
-            <td>Агент решает сам по description</td>
-            <td style="color:var(--accent-green)">Низкий — on-demand</td>
+            <td><strong>Короткие модули по темам</strong></td>
+            <td>Продакт, фронт, a11y, perf…</td>
+            <td style="color:var(--accent-green)">Ниже, если подключаете только нужное</td>
           </tr>
           <tr>
-            <td><strong>Manual</strong></td>
-            <td>Только при @-упоминании</td>
-            <td style="color:var(--accent-green)">Минимальный</td>
+            <td><strong>Только промпт</strong></td>
+            <td>Разовая подсказка без закрепления в репо</td>
+            <td style="color:var(--accent-green)">Нет регламента в git</td>
           </tr>
         </table>
         <div class="highlight-box warn" style="margin-top:16px">
-          <strong>Лимит:</strong> Жёсткого ограничения на количество .mdc-файлов нет, но каждое always-apply правило на ~100 строк съедает ~500–1000 токенов. 5 таких правил = 2500–5000 токенов <strong>до начала диалога</strong>. Контекстное окно — 200K токенов; rules конкурируют с кодом и историей чата.
+          <strong>Лимит:</strong> каждые ~100 строк подключённых rules — примерно 500–1000 токенов <strong>до задачи</strong>. Пять «толстых» файлов легко съедают заметную долю окна рядом с кодом и историей чата; проектируйте <code>instructions</code> осознанно.
         </div>
       </div>
       <div>
@@ -973,34 +1037,101 @@ service layer.
         <div class="card" style="margin-bottom:12px">
           <span class="tag tag-green">Рекомендация</span>
           <ul>
-            <li><strong>Always Apply:</strong> 1–3 правила, суммарно &lt; 150 строк</li>
-            <li><strong>Auto Attached:</strong> 5–15 правил по glob-паттернам</li>
-            <li><strong>Agent Requested:</strong> без ограничений (загружает description)</li>
-            <li><strong>Manual:</strong> без ограничений</li>
+            <li><strong>Базовый набор</strong> — 3–6 модульных файлов в <code>.kilo/rules/</code>, суммарно целиться в &lt; 300–400 строк подключённого текста</li>
+            <li><strong>Один файл — одна тема</strong> — проще ревью, диффы и отключение части instructions</li>
+            <li><strong>Префиксы имён</strong> — <code>00-</code>, <code>10-</code>… — явный порядок чтения для людей</li>
+            <li><strong>Не дублировать</strong> то, что уже в PRD; rules — «как мы кодим», PRD — «что считаем done»</li>
           </ul>
         </div>
         <div class="card" style="margin-bottom:12px">
-          <span class="tag tag-pink">Типичная структура</span>
-          <pre style="font-size:11px;margin-top:4px">.cursor/rules/
-├── project-core.mdc      <span class="cm"># alwaysApply: true</span>
-├── typescript.mdc         <span class="cm"># globs: **/*.ts</span>
-├── react-components.mdc   <span class="cm"># globs: src/components/**</span>
-├── api-standards.mdc      <span class="cm"># globs: src/api/**</span>
-├── testing.mdc            <span class="cm"># globs: **/*.test.*</span>
-├── database.mdc           <span class="cm"># globs: src/db/**</span>
-└── deployment.mdc         <span class="cm"># agent requested</span></pre>
+          <span class="tag tag-pink">Типичная структура (фрагмент)</span>
+          <pre style="font-size:11px;margin-top:4px">.kilo/rules/
+├── 00-product-principles.md
+├── 10-frontend-architecture.md
+├── 20-ui-system.md
+├── 30-accessibility.md
+├── 40-performance.md
+└── 50-slide-deck.md</pre>
         </div>
         <div class="card">
-          <span class="tag tag-yellow">Приоритет загрузки</span>
-          <p style="font-size:13px">Team Rules → Project Rules → User Rules → Legacy (.cursorrules). При конфликте побеждает более высокий приоритет.</p>
+          <span class="tag tag-yellow">Приоритет источников</span>
+          <p style="font-size:13px">Глобальные настройки Kilo (если есть) → <code>instructions</code> и файлы в репозитории → явный промпт в задаче. В спорных случаях «источник правды» — закоммиченные project rules.</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SLIDE 9: Skills -->
-<div class="slide slide-content-left" data-slide="8">
+<!-- SLIDE 10: Rules — регламент vs промпт -->
+<div class="slide slide-content-left" data-slide="9">
+  <div class="content">
+    <h2><span class="accent-b">Rules</span> — регламент проекта vs разовый промпт</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:17px;line-height:1.8;color:var(--text-secondary);margin-bottom:24px">
+          Промпт и регламент — разные уровни ответственности. Промпт задаёт один результат; rules в Kilo Code задают поведение агента по умолчанию на весь проект.
+        </p>
+        <div class="card" style="margin-bottom:16px">
+          <span class="tag tag-pink">Промпт</span>
+          <ul>
+            <li>Влияет на одну задачу / один ответ</li>
+            <li>Живёт в чате, не в репозитории</li>
+            <li>Нужно повторять каждую сессию</li>
+            <li>Подходит для разовых уточнений</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag tag-green">Rules (регламент)</span>
+          <ul>
+            <li>Влияет на весь проект, на каждую задачу</li>
+            <li>Версионируется вместе с кодом</li>
+            <li>Подключается автоматически через <code>kilo.jsonc</code></li>
+            <li>Подходит для командных стандартов и политик</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--accent-4)">Когда что использовать</h3>
+        <table class="comparison-table">
+          <tr>
+            <th>Ситуация</th>
+            <th>Инструмент</th>
+          </tr>
+          <tr>
+            <td>«Для этой задачи используй функциональный стиль»</td>
+            <td><strong>Промпт</strong></td>
+          </tr>
+          <tr>
+            <td>«В проекте всегда RFC 7807 для ошибок API»</td>
+            <td><strong style="color:var(--accent-green)">Rule</strong></td>
+          </tr>
+          <tr>
+            <td>«Сейчас переключись в более подробный режим»</td>
+            <td><strong>Промпт</strong></td>
+          </tr>
+          <tr>
+            <td>«Все файлы на TypeScript strict»</td>
+            <td><strong style="color:var(--accent-green)">Rule</strong></td>
+          </tr>
+          <tr>
+            <td>«Разбей этот компонент на три»</td>
+            <td><strong>Промпт</strong></td>
+          </tr>
+          <tr>
+            <td>«Компоненты < 200 строк — всегда»</td>
+            <td><strong style="color:var(--accent-green)">Rule</strong></td>
+          </tr>
+        </table>
+        <div class="highlight-box warn" style="margin-top:12px">
+          <strong>Правило большого пальца:</strong> если вы повторяете один и тот же инструктаж в разных сессиях — это сигнал оформить его в rule.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: Skills -->
+<div class="slide slide-content-left" data-slide="10">
   <div class="content">
     <h2><span class="accent-g">Skills</span> — подключаемые компетенции</h2>
     <div class="two-col">
@@ -1052,15 +1183,15 @@ service layer.
             <tr>
               <td>Хранение</td>
               <td><code>skills/</code></td>
-              <td><code>.cursor/rules/</code></td>
+              <td><code>.kilo/rules/</code></td>
               <td>Корень проекта</td>
             </tr>
           </table>
         </div>
         <div class="card">
-          <span class="tag tag-blue">Хранение и экосистема</span>
-          <p style="font-size:13px"><strong>Personal:</strong> <code>~/.cursor/skills/</code> — доступны во всех проектах</p>
-          <p style="font-size:13px;margin-top:4px"><strong>Project:</strong> <code>.cursor/skills/</code> — shared с командой через git</p>
+          <span class="tag tag-blue">Хранение</span>
+          <p style="font-size:13px"><strong>Personal:</strong> <code>~/.agents/skills/</code> — доступны во всех проектах</p>
+          <p style="font-size:13px;margin-top:4px"><strong>Project:</strong> <code>.agents/skills/</code> — shared с командой через git</p>
           <p style="font-size:13px;margin-top:8px">Установка: <code>npx skills add owner/repo@skill -g</code></p>
           <p style="font-size:13px;margin-top:4px">Каталог: <a href="https://skills.sh" style="color:var(--accent-5)">skills.sh</a></p>
         </div>
@@ -1069,119 +1200,87 @@ service layer.
   </div>
 </div>
 
-<!-- SLIDE 10: Skills Ecosystem - 9 Agents -->
-<div class="slide slide-content-left" data-slide="9">
+<!-- SLIDE 12: Skills Ecosystem -->
+<div class="slide slide-content-left" data-slide="11">
   <div class="content">
-    <h2><span class="accent-g">Skills</span> — экосистема 9 агентов</h2>
+    <h2><span class="accent-g">Skills</span> — один формат, вся экосистема агентов</h2>
     <div class="two-col">
       <div>
-        <p style="font-size:15px;color:var(--text-secondary);margin-bottom:16px">
-          SKILL.md появился в Claude Code (октябрь 2025). За 2 месяца его приняли все основные IDE-агенты. Стандарт общий — реализации различаются.
+        <p style="font-size:15px;color:var(--text-secondary);margin-bottom:14px">
+          SKILL.md появился в <strong>Claude Code (Anthropic)</strong> как способ загружать экспертизу точечно — вместо того чтобы держать всё в системном промпте. За несколько месяцев формат приняли конкурирующие агенты.
         </p>
         <table class="comparison-table" style="font-size:12px">
           <tr>
             <th>Агент</th>
-            <th>Директория</th>
+            <th>Директория skills</th>
             <th>Активация</th>
-            <th>Каталог</th>
           </tr>
           <tr>
             <td><strong>Claude Code</strong></td>
             <td><code>.claude/skills/</code></td>
             <td>Description match</td>
-            <td>anthropics/skills</td>
           </tr>
           <tr>
-            <td><strong>Cursor</strong></td>
-            <td><code>.cursor/skills/</code></td>
-            <td>Glob + description</td>
-            <td>LobeHub, skills.sh</td>
+            <td><strong>Kilo Code</strong></td>
+            <td><code>.agents/skills/</code></td>
+            <td>Description match</td>
           </tr>
           <tr>
             <td><strong>Codex CLI</strong></td>
             <td><code>.agents/skills/</code></td>
             <td>$skill-name</td>
-            <td>openai/skills</td>
           </tr>
           <tr>
-            <td><strong>Copilot</strong></td>
+            <td><strong>GitHub Copilot</strong></td>
             <td><code>.github/skills/</code></td>
             <td>/skill-name</td>
-            <td>awesome-copilot</td>
           </tr>
           <tr>
             <td><strong>Kiro (AWS)</strong></td>
             <td><code>.kiro/skills/</code></td>
             <td>GUI панель</td>
-            <td>Нет</td>
           </tr>
           <tr>
             <td><strong>Goose</strong></td>
             <td><code>.goose/skills/</code></td>
-            <td>Natural lang</td>
-            <td>Block internal</td>
+            <td>Natural language</td>
           </tr>
         </table>
         <div class="highlight-box" style="margin-top:12px">
-          <strong>Портативная директория:</strong> <code>.agents/skills/</code> — читается большинством агентов. Для максимальной совместимости кладите skills туда.
+          <strong>Портативный путь:</strong> <code>.agents/skills/</code> — читается Claude Code, Kilo Code, Codex CLI и большинством агентов. Кладите сюда для максимальной совместимости.
         </div>
       </div>
       <div>
-        <h3 style="color:var(--accent-1)">Anthropic vs LangChain vs Cursor</h3>
-        <table class="comparison-table" style="font-size:12px">
-          <tr>
-            <th>Аспект</th>
-            <th>Anthropic</th>
-            <th>LangChain</th>
-            <th>Cursor</th>
-          </tr>
-          <tr>
-            <td>Происхождение</td>
-            <td>Автор стандарта</td>
-            <td>Интеграция стандарта в deepagents-CLI</td>
-            <td>Адаптация с v2.3.35</td>
-          </tr>
-          <tr>
-            <td>Загрузка</td>
-            <td>3-уровневый progressive disclosure</td>
-            <td>Filesystem-based с backend-ами</td>
-            <td>Glob + description match</td>
-          </tr>
-          <tr>
-            <td>Уникальное</td>
-            <td>Партнёрские skills (Figma, Stripe, Atlassian)</td>
-            <td>Skills интегрированы в middleware</td>
-            <td>Hooks (security pipeline)</td>
-          </tr>
-          <tr>
-            <td>Инсталлятор</td>
-            <td>Нет (community tools)</td>
-            <td>deepagents-CLI</td>
-            <td>npx skills add</td>
-          </tr>
-          <tr>
-            <td>Субагенты</td>
-            <td>Claude Code subagents</td>
-            <td>SubAgentMiddleware</td>
-            <td>Subagents v2.4</td>
-          </tr>
-          <tr>
-            <td>50+ skills</td>
-            <td><span class="check">✓</span> без context bloat</td>
-            <td><span class="check">✓</span> on-demand loading</td>
-            <td><span class="check">✓</span> on-demand loading</td>
-          </tr>
-        </table>
-        <div class="highlight-box warn" style="margin-top:12px">
-          <strong>Ключевое различие:</strong> Anthropic = origin author + партнёры. LangChain = framework-level интеграция с middleware и memory. Cursor = IDE-native с hooks и subagents. Формат SKILL.md — один, реализации — разные.
+        <div class="card" style="margin-bottom:14px">
+          <span class="tag tag-purple">Почему формат распространился</span>
+          <ul style="font-size:14px;margin-top:8px">
+            <li>Агент читает только нужный skill — контекст не растёт</li>
+            <li>Markdown без спецсинтаксиса — любой агент читает</li>
+            <li>Версионируются в git — история, ревью, откат</li>
+            <li>Один навык = один файл: легко обновлять и переиспользовать</li>
+          </ul>
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <span class="tag tag-green">Skills в Kilo Code</span>
+          <pre style="font-size:12px;margin-top:8px"><span class="cm"># Установка skill из каталога</span>
+npx skills add owner/repo@skill-name
+
+<span class="cm"># Личный каталог (все проекты)</span>
+~/.agents/skills/
+
+<span class="cm"># Командный каталог (через git)</span>
+.agents/skills/</pre>
+        </div>
+        <div class="highlight-box warn">
+          <strong>Формат один — инструменты разные.</strong> SKILL.md читают все агенты; активация, каталоги и механизм discovery у каждого свои. Пишите skills под наименьший общий знаменатель.
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SLIDE 11: Roles -->
-<div class="slide slide-content-left" data-slide="10">
+<!-- SLIDE 13: Roles -->
+<div class="slide slide-content-left" data-slide="12">
   <div class="content">
     <h2><span class="accent">Roles</span> — эволюция роли инженера</h2>
     <div class="two-col">
@@ -1234,8 +1333,8 @@ service layer.
   </div>
 </div>
 
-<!-- SLIDE 12: Roles for Frontend Developer -->
-<div class="slide slide-content-left" data-slide="11">
+<!-- SLIDE 14: Roles for Frontend Developer -->
+<div class="slide slide-content-left" data-slide="13">
   <div class="content">
     <h2><span class="accent-b">Roles</span> для Frontend Developer</h2>
     <div class="two-col">
@@ -1255,17 +1354,13 @@ service layer.
         </div>
         <div class="card">
           <span class="tag tag-blue">Пример rule для React</span>
-          <pre style="font-size:11px;margin-top:4px"><span class="cm"># .cursor/rules/react.mdc</span>
----
-<span class="kw">description</span>: <span class="str">React component patterns</span>
-<span class="kw">globs</span>: <span class="str">src/components/**/*.tsx</span>
-<span class="kw">alwaysApply</span>: <span class="str">false</span>
----
-- Use functional components only
-- Extract hooks > 10 lines into custom hooks
-- Props interface named {Component}Props
-- No default exports for components
-- Error boundaries on route level</pre>
+          <pre style="font-size:11px;margin-top:4px"><span class="cm"># .kilo/rules/15-react-patterns.md</span>
+<span class="kw">## Компоненты</span>
+- Только функциональные компоненты
+- Хуки длиннее ~10 строк — выносить в custom hooks
+- Интерфейс пропсов: имя как <code>{Component}Props</code>
+- Не использовать default export для компонентов
+- Error boundaries на уровне маршрутов</pre>
         </div>
       </div>
       <div>
@@ -1273,7 +1368,7 @@ service layer.
           <span class="tag tag-pink">Мешают</span>
           <h3 style="font-size:16px;color:var(--accent-orange)">Rules и Skills, которые вредят</h3>
           <ul>
-            <li><strong>Backend-specific rules в alwaysApply</strong> — SQL conventions, ORM patterns загружаются на каждый промпт, тратят контекст впустую</li>
+            <li><strong>Backend-правила в «толстом» общем instructions</strong> — SQL, ORM и т.&nbsp;п. тянутся даже при работе только с UI, тратят контекст</li>
             <li><strong>Избыточные style guides</strong> — копирование всего Airbnb ESLint guide в правило; агент и так знает стандарты</li>
             <li><strong>Rules про CI/CD</strong> — deployment, Docker, Terraform — irrelevant при работе с .tsx файлами</li>
             <li><strong>Overscoped always-apply</strong> — «Всегда используй PostgreSQL» при работе с UI-компонентами</li>
@@ -1283,22 +1378,22 @@ service layer.
         </div>
         <div class="card">
           <span class="tag tag-yellow">Оптимальный набор Rules для Frontend</span>
-          <pre style="font-size:11px;margin-top:4px">.cursor/rules/
-├── project-core.mdc      <span class="cm"># always: stack, monorepo</span>
-├── react-patterns.mdc     <span class="cm"># glob: **/*.tsx</span>
-├── typescript-strict.mdc  <span class="cm"># glob: **/*.{ts,tsx}</span>
-├── styling.mdc            <span class="cm"># glob: **/*.{css,tsx}</span>
-├── testing.mdc            <span class="cm"># glob: **/*.test.*</span>
-└── a11y.mdc               <span class="cm"># agent-requested</span>
-<span class="cm"># Итого: 1 always + 4 glob + 1 agent = 6 rules</span></pre>
+          <pre style="font-size:11px;margin-top:4px">.kilo/rules/
+├── 00-project-core.md       <span class="cm"># стек, монорепо</span>
+├── 15-react-patterns.md    <span class="cm"># UI / компоненты</span>
+├── 16-typescript-strict.md <span class="cm"># типы .ts / .tsx</span>
+├── 17-styling.md           <span class="cm"># стили, дизайн-токены</span>
+├── 18-testing.md           <span class="cm"># тесты</span>
+└── 30-a11y.md              <span class="cm"># доступность</span>
+<span class="cm"># В kilo.jsonc подключайте подмножество через instructions</span></pre>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SLIDE 13: Subagents -->
-<div class="slide slide-content-left" data-slide="12">
+<!-- SLIDE 15: Subagents -->
+<div class="slide slide-content-left" data-slide="14">
   <div class="content">
     <h2><span class="accent-b">Subagents</span> — делегирование и специализация</h2>
     <div class="two-col">
@@ -1307,7 +1402,7 @@ service layer.
           Subagents — <strong>специализированные агенты</strong>, работающие в изолированном контексте. Основной агент делегирует задачи через <code>task</code> tool, получая обратно только финальный отчёт.
         </p>
         <div class="card" style="margin-bottom:16px">
-          <span class="tag tag-blue">Встроенные в Cursor</span>
+          <span class="tag tag-blue">Встроенные subagents</span>
           <ul>
             <li><strong>Explore</strong> — поиск по кодовой базе, глобы, grep</li>
             <li><strong>Shell</strong> — выполнение bash-команд</li>
@@ -1357,8 +1452,8 @@ agent = <span class="fn">create_deep_agent</span>(
   </div>
 </div>
 
-<!-- SLIDE 14: Checkpoints -->
-<div class="slide slide-content-left" data-slide="13">
+<!-- SLIDE 16: Checkpoints -->
+<div class="slide slide-content-left" data-slide="15">
   <div class="content">
     <h2><span class="accent-g">Checkpoints</span> — точки восстановления</h2>
     <div class="two-col">
@@ -1415,8 +1510,8 @@ agent = <span class="fn">create_deep_agent</span>(
   </div>
 </div>
 
-<!-- SLIDE 15: HITL -->
-<div class="slide slide-content-left" data-slide="14">
+<!-- SLIDE 17: HITL -->
+<div class="slide slide-content-left" data-slide="16">
   <div class="content">
     <h2><span class="accent">HITL</span> — человек в контуре</h2>
     <div class="two-col">
@@ -1472,8 +1567,8 @@ result = agent.<span class="fn">invoke</span>(
   </div>
 </div>
 
-<!-- SLIDE 16: Middleware & TodoList -->
-<div class="slide slide-content-left" data-slide="15">
+<!-- SLIDE 18: Middleware & TodoList -->
+<div class="slide slide-content-left" data-slide="17">
   <div class="content">
     <h2><span class="accent-b">Middleware</span> и <span class="accent-g">TodoList</span></h2>
     <div class="two-col">
@@ -1544,8 +1639,8 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 17: Memory -->
-<div class="slide slide-content-left" data-slide="16">
+<!-- SLIDE 19: Memory -->
+<div class="slide slide-content-left" data-slide="18">
   <div class="content">
     <h2><span class="accent-g">Memory</span> — модель памяти агента</h2>
     <div class="three-col">
@@ -1587,8 +1682,8 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 18: Ecosystem Registries -->
-<div class="slide slide-content-left" data-slide="17">
+<!-- SLIDE 20: Ecosystem Registries -->
+<div class="slide slide-content-left" data-slide="19">
   <div class="content">
     <h2>Единые <span class="accent">реестры</span> — кто где?</h2>
     <div class="two-col">
@@ -1612,10 +1707,9 @@ write_todos([
           <tr>
             <td><strong>Rules</strong></td>
             <td>
-              <a href="https://cursor.directory" style="color:var(--accent-5)">cursor.directory</a> — 500+ правил<br>
-              <a href="https://prpm.dev" style="color:var(--accent-5)">PRPM.dev</a> — 7500+ пакетов<br>
-              awesome-cursorrules — 38K+ stars<br>
-              cursor-handbook — 110 rules + agents
+              <a href="https://prpm.dev" style="color:var(--accent-5)">PRPM.dev</a> — пакеты и сниппеты под разные агенты<br>
+              Community-коллекции на GitHub, curated lists<br>
+              Золотой стандарт для команды — свои <code>.kilo/rules/</code> в репозитории
             </td>
             <td><span style="color:var(--accent-yellow)">Фрагментирован</span><br><span style="font-size:11px;color:var(--text-muted)">Нет единого стандарта обмена</span></td>
           </tr>
@@ -1645,7 +1739,7 @@ write_todos([
         </div>
         <div class="card" style="margin-bottom:12px">
           <span class="tag tag-yellow">Rules — богатый, но фрагментированный</span>
-          <p style="font-size:14px">3+ крупных каталога, но нет единого формата обмена. .mdc (Cursor) ≠ .windsurfrules ≠ CLAUDE.md. PRPM.dev пытается стать универсальным npm для AI-правил с поддержкой Cursor, Claude, Windsurf и Copilot.</p>
+          <p style="font-size:14px">Каталоги и шаблоны правил по-прежнему фрагментированы по экосистемам. Опирайтесь на закоммиченные Markdown-файлы и явный список <code>instructions</code> в Kilo Code; внешние пакеты (в т.&nbsp;ч. PRPM.dev) — как стартовые заготовки, которые нужно адаптировать.</p>
         </div>
         <div class="card" style="margin-bottom:12px">
           <span class="tag tag-pink">GitAgent — попытка объединить всё</span>
@@ -1659,8 +1753,8 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 19: Framework Stack -->
-<div class="slide slide-content-left" data-slide="18">
+<!-- SLIDE 21: Framework Stack -->
+<div class="slide slide-content-left" data-slide="20">
   <div class="content">
     <h2><span class="accent">Стек</span> фреймворков</h2>
     <div class="two-col">
@@ -1680,7 +1774,7 @@ write_todos([
           </div>
         </div>
         <div class="highlight-box" style="margin-top:24px">
-          <strong>Слои, не конкуренты.</strong> Выбор верхнего уровня не отсекает нижние. LangGraph графы работают внутри Deep Agents, LangChain примитивы — везде. Deep Agents — одна из реализаций «batteries-included» уровня; аналоги: CrewAI, AutoGen, и IDE-встроенные агенты (Cursor, Windsurf).
+          <strong>Слои, не конкуренты.</strong> Выбор верхнего уровня не отсекает нижние. LangGraph графы работают внутри Deep Agents, LangChain примитивы — везде. Deep Agents — одна из реализаций «batteries-included» уровня; аналоги: CrewAI, AutoGen, и IDE-встроенные агенты (Kilo Code, Windsurf).
         </div>
       </div>
       <div>
@@ -1716,8 +1810,8 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 20: PEV Pattern -->
-<div class="slide slide-content-left" data-slide="19">
+<!-- SLIDE 22: PEV Pattern -->
+<div class="slide slide-content-left" data-slide="21">
   <div class="content">
     <h2>Паттерн <span class="accent-b">PEV</span></h2>
     <div class="diagram-flow" style="margin-bottom:40px">
@@ -1772,8 +1866,8 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 21: Anti-patterns -->
-<div class="slide slide-content-left" data-slide="20">
+<!-- SLIDE 23: Anti-patterns -->
+<div class="slide slide-content-left" data-slide="22">
   <div class="content">
     <h2><span class="accent">Антипаттерны</span> и ловушки</h2>
     <div class="two-col">
@@ -1824,8 +1918,8 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 22: Reflection, Model Selection, Best-of-N -->
-<div class="slide slide-content-left" data-slide="21">
+<!-- SLIDE 24: Reflection, Model Selection, Best-of-N -->
+<div class="slide slide-content-left" data-slide="23">
   <div class="content">
     <h2>Дополнительные <span class="accent">примитивы</span></h2>
     <div class="three-col">
@@ -1874,8 +1968,8 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 23: Context Window -->
-<div class="slide slide-content-left" data-slide="22">
+<!-- SLIDE 25: Context Window -->
+<div class="slide slide-content-left" data-slide="24">
   <div class="content">
     <h2><span class="accent-b">Context Window</span> — ограниченный ресурс</h2>
     <div class="two-col">
@@ -1914,14 +2008,14 @@ write_todos([
               <td>Средняя</td>
             </tr>
             <tr>
-              <td>Project Rules (always)</td>
-              <td>Всегда</td>
-              <td>Низкая*</td>
+              <td>Rules (<code>.kilo</code>, весь набор в instructions)</td>
+              <td>По конфигурации сессии</td>
+              <td>Высокая–средняя*</td>
             </tr>
             <tr>
-              <td>Project Rules (glob)</td>
-              <td>По файлу</td>
-              <td>Низкая</td>
+              <td>Rules (<code>.kilo</code>, узкий glob / часть файлов)</td>
+              <td>Когда подключается подмножество</td>
+              <td>Низкая–средняя</td>
             </tr>
             <tr>
               <td>Skills</td>
@@ -1939,7 +2033,7 @@ write_todos([
               <td>Растёт</td>
             </tr>
           </table>
-          <p style="font-size:12px;color:var(--text-muted);margin-top:8px">* при соблюдении < 50 строк на правило</p>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px">* при коротких модулях и ограниченном числе подключённых <code>.md</code></p>
         </div>
         <div class="highlight-box warn">
           <strong>Практика:</strong> Если агент «забывает» ранние инструкции — контекст переполнен. Делегируйте в субагент или разбейте на отдельные сессии с checkpoint-ами.
@@ -1949,8 +2043,8 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 24: When to use what -->
-<div class="slide slide-content-left" data-slide="23">
+<!-- SLIDE 26: When to use what -->
+<div class="slide slide-content-left" data-slide="25">
   <div class="content">
     <h2><span class="accent-g">Матрица</span> применимости</h2>
     <table class="comparison-table" style="margin-bottom:24px">
@@ -1996,14 +2090,14 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 25: Key Takeaways -->
-<div class="slide slide-title" data-slide="24">
+<!-- SLIDE 27: Key Takeaways -->
+<div class="slide slide-title" data-slide="26">
   <div class="content" style="max-width:900px">
     <h2 style="font-size:48px;margin-bottom:40px"><span class="accent">Ключевые</span> выводы</h2>
     <div style="text-align:left">
       <ul class="list-styled" style="font-size:19px">
         <li><strong>PRD</strong> — не документация, а исполняемый контракт с чеклистом «done»</li>
-        <li><strong>Rules</strong> — конституция проекта, < 50 строк, одна забота на правило</li>
+        <li><strong>Rules</strong> — конституция проекта в Kilo Code (<code>.kilo/rules/</code> + <code>kilo.jsonc</code>), короткие модули, одна тема на файл</li>
         <li><strong>Skills</strong> — on-demand экспертиза, < 500 строк, progressive disclosure</li>
         <li><strong>Roles</strong> — инженер = архитектор + оркестратор + ревьюер, не prompt-writer</li>
         <li><strong>Subagents</strong> — stateless, изолированный контекст, явные skills</li>
@@ -2024,8 +2118,8 @@ write_todos([
   </div>
 </div>
 
-<!-- SLIDE 26: Q&A -->
-<div class="slide slide-title" data-slide="25">
+<!-- SLIDE 28: Q&A -->
+<div class="slide slide-title" data-slide="27">
   <h1 style="font-size:72px">Q&A</h1>
   <div class="subtitle">Вопросы и дискуссия</div>
   <div style="max-width:700px;margin-top:32px;text-align:left">
@@ -2033,20 +2127,20 @@ write_todos([
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:14px;color:var(--text-secondary)">
       <div class="card" style="padding:16px">
         <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px">Документация</div>
-        <div>docs.cursor.com/context/rules</div>
-        <div>cursor.com/docs/subagents</div>
+        <div>Kilo Code — документация: project rules, <code>kilo.jsonc</code>, instructions</div>
+        <div>Kilo Code — subagents docs</div>
         <div>skills.sh</div>
       </div>
       <div class="card" style="padding:16px">
         <div style="font-weight:700;color:var(--text-primary);margin-bottom:6px">Практика</div>
-        <div>cursor.com/blog/agent-best-practices</div>
+        <div>kilocode.ai/blog/agent-best-practices</div>
         <div>vibe-kb.com/guide</div>
         <div>31daysofvibecoding.com</div>
       </div>
     </div>
   </div>
   <div class="meta" style="margin-top:24px">
-    <span style="color:var(--text-muted)">16 терминов &middot; 26 слайдов</span>
+    <span style="color:var(--text-muted)">16 терминов &middot; 28 слайдов</span>
   </div>
 </div>
 
